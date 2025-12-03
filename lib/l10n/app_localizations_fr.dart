@@ -1,0 +1,166 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for French (`fr`).
+class AppLocalizationsFr extends AppLocalizations {
+  AppLocalizationsFr([String locale = 'fr']) : super(locale);
+
+  @override
+  String get appTitle => 'Chatting Us';
+
+  @override
+  String get settings => 'Paramètres';
+
+  @override
+  String get language => 'Langue';
+
+  @override
+  String get theme => 'Thème';
+
+  @override
+  String get darkMode => 'Mode Sombre';
+
+  @override
+  String get lightMode => 'Mode Clair';
+
+  @override
+  String get systemMode => 'Mode Système';
+
+  @override
+  String get welcomeBack => 'Bon retour';
+
+  @override
+  String get emailOrUsername => 'Email ou Nom d\'utilisateur';
+
+  @override
+  String get enterEmail => 'Entrez votre email ou nom d\'utilisateur';
+
+  @override
+  String get password => 'Mot de passe';
+
+  @override
+  String get enterPassword => 'Entrez votre mot de passe';
+
+  @override
+  String get forgotPassword => 'Mot de passe oublié ?';
+
+  @override
+  String get logIn => 'Se connecter';
+
+  @override
+  String get orContinueWith => 'ou continuer avec';
+
+  @override
+  String get continueWithGoogle => 'Continuer avec Google';
+
+  @override
+  String get continueWithMicrosoft => 'Continuer avec Microsoft';
+
+  @override
+  String get dontHaveAccount => 'Vous n\'avez pas de compte ?';
+
+  @override
+  String get signUp => 'S\'inscrire';
+
+  @override
+  String get createAccount => 'Créez votre compte';
+
+  @override
+  String get signUpGoogle => 'S\'inscrire avec Google';
+
+  @override
+  String get signUpMicrosoft => 'S\'inscrire avec Microsoft';
+
+  @override
+  String get or => 'OU';
+
+  @override
+  String get firstName => 'Prénom';
+
+  @override
+  String get lastName => 'Nom';
+
+  @override
+  String get emailAddress => 'Adresse email';
+
+  @override
+  String get phoneNumber => 'Numéro de téléphone';
+
+  @override
+  String get confirmPassword => 'Confirmer le mot de passe';
+
+  @override
+  String get agreeTo => 'J\'accepte les';
+
+  @override
+  String get termsOfService => 'Conditions d\'utilisation';
+
+  @override
+  String get and => 'et';
+
+  @override
+  String get privacyPolicy => 'Politique de confidentialité';
+
+  @override
+  String get alreadyHaveAccount => 'Vous avez déjà un compte ?';
+
+  @override
+  String get edit => 'Modifier';
+
+  @override
+  String get chats => 'Discussions';
+
+  @override
+  String get search => 'Rechercher';
+
+  @override
+  String get yourStory => 'Votre story';
+
+  @override
+  String get reels => 'Reels';
+
+  @override
+  String get explore => 'Explorer';
+
+  @override
+  String get profile => 'Profil';
+
+  @override
+  String get message => 'Message';
+
+  @override
+  String get read => 'Lu';
+
+  @override
+  String get reelShared => 'Reel partagé';
+
+  @override
+  String get today => 'Aujourd\'hui';
+
+  @override
+  String get yesterday => 'Hier';
+
+  @override
+  String get home => 'Accueil';
+
+  @override
+  String get messages => 'Messages';
+
+  @override
+  String get follow => 'Suivre';
+
+  @override
+  String get likes => 'J\'aime';
+
+  @override
+  String get comments => 'Commentaires';
+
+  @override
+  String get shares => 'Partages';
+
+  @override
+  String get camera => 'Caméra';
+}
