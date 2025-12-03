@@ -163,4 +163,73 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get camera => 'Caméra';
+
+  @override
+  String get posts => 'Publications';
+
+  @override
+  String get followers => 'Abonnés';
+
+  @override
+  String get following => 'Abonnements';
+
+  @override
+  String get editProfile => 'Modifier le profil';
+
+  @override
+  String get stories => 'Stories';
+
+  @override
+  String get tagged => 'Identifications';
+
+  @override
+  String get bio => 'Biographie';
+
+  @override
+  String get username => 'Nom d\'utilisateur';
+
+  @override
+  String get feed => 'Fil d\'actualité';
+
+  @override
+  String viewAllComments(Object count) {
+    return 'Voir les $count commentaires';
+  }
+
+  @override
+  String get addComment => 'Ajouter un commentaire...';
+
+  @override
+  String get workingOnProject =>
+      'Je travaille sur un nouveau projet. Très heureux de partager plus bientôt ! #codage #développeur';
+
+  @override
+  String get sendMessage => 'Envoyer un message';
+
+  @override
+  String get addToStory => 'Ajouter à la story';
+
+  @override
+  String get story => 'Story';
+
+  @override
+  String get reel => 'Reel';
+
+  @override
+  String get live => 'En direct';
+
+  @override
+  String get holdForVideo => 'Maintenez pour vidéo, appuyez pour photo.';
+
+  @override
+  String get vibrant => 'Vibrant';
+
+  @override
+  String get blackAndWhite => 'Noir & Blanc';
+
+  @override
+  String get subtle => 'Subtil';
+
+  @override
+  String get vibrants => 'Vibrants';
 }

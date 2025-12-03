@@ -59,5 +59,19 @@
   "tagged": "Tagged",
   "bio": "Bio",
   "username": "Username",
-  "settings": "Settings"
+  "settings": "Settings",
+  "feed": "Feed",
+  "viewAllComments": "View all {count} comments",
+  "addComment": "Add a comment...",
+  "workingOnProject": "Working on a new project. Super excited to share more soon! #coding #developer",
+  "sendMessage": "Send Message",
+  "addToStory": "Add to Story",
+  "story": "Story",
+  "reel": "Reel",
+  "live": "Live",
+  "holdForVideo": "Hold for video, tap for photo.",
+  "vibrant": "Vibrant",
+  "blackAndWhite": "Black & White",
+  "subtle": "Subtle",
+  "vibrants": "Vibrants"
 }

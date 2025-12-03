@@ -163,4 +163,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get camera => 'Camera';
+
+  @override
+  String get posts => 'Posts';
+
+  @override
+  String get followers => 'Followers';
+
+  @override
+  String get following => 'Following';
+
+  @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String get stories => 'Stories';
+
+  @override
+  String get tagged => 'Tagged';
+
+  @override
+  String get bio => 'Bio';
+
+  @override
+  String get username => 'Username';
+
+  @override
+  String get feed => 'Feed';
+
+  @override
+  String viewAllComments(Object count) {
+    return 'View all $count comments';
+  }
+
+  @override
+  String get addComment => 'Add a comment...';
+
+  @override
+  String get workingOnProject =>
+      'Working on a new project. Super excited to share more soon! #coding #developer';
+
+  @override
+  String get sendMessage => 'Send Message';
+
+  @override
+  String get addToStory => 'Add to Story';
+
+  @override
+  String get story => 'Story';
+
+  @override
+  String get reel => 'Reel';
+
+  @override
+  String get live => 'Live';
+
+  @override
+  String get holdForVideo => 'Hold for video, tap for photo.';
+
+  @override
+  String get vibrant => 'Vibrant';
+
+  @override
+  String get blackAndWhite => 'Black & White';
+
+  @override
+  String get subtle => 'Subtle';
+
+  @override
+  String get vibrants => 'Vibrants';
 }

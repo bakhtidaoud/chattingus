@@ -411,6 +411,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Camera'**
   String get camera;
+
+  /// No description provided for @posts.
+  ///
+  /// In en, this message translates to:
+  /// **'Posts'**
+  String get posts;
+
+  /// No description provided for @followers.
+  ///
+  /// In en, this message translates to:
+  /// **'Followers'**
+  String get followers;
+
+  /// No description provided for @following.
+  ///
+  /// In en, this message translates to:
+  /// **'Following'**
+  String get following;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfile;
+
+  /// No description provided for @stories.
+  ///
+  /// In en, this message translates to:
+  /// **'Stories'**
+  String get stories;
+
+  /// No description provided for @tagged.
+  ///
+  /// In en, this message translates to:
+  /// **'Tagged'**
+  String get tagged;
+
+  /// No description provided for @bio.
+  ///
+  /// In en, this message translates to:
+  /// **'Bio'**
+  String get bio;
+
+  /// No description provided for @username.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get username;
+
+  /// No description provided for @feed.
+  ///
+  /// In en, this message translates to:
+  /// **'Feed'**
+  String get feed;
+
+  /// No description provided for @viewAllComments.
+  ///
+  /// In en, this message translates to:
+  /// **'View all {count} comments'**
+  String viewAllComments(Object count);
+
+  /// No description provided for @addComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a comment...'**
+  String get addComment;
+
+  /// No description provided for @workingOnProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Working on a new project. Super excited to share more soon! #coding #developer'**
+  String get workingOnProject;
+
+  /// No description provided for @sendMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Message'**
+  String get sendMessage;
+
+  /// No description provided for @addToStory.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Story'**
+  String get addToStory;
+
+  /// No description provided for @story.
+  ///
+  /// In en, this message translates to:
+  /// **'Story'**
+  String get story;
+
+  /// No description provided for @reel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reel'**
+  String get reel;
+
+  /// No description provided for @live.
+  ///
+  /// In en, this message translates to:
+  /// **'Live'**
+  String get live;
+
+  /// No description provided for @holdForVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold for video, tap for photo.'**
+  String get holdForVideo;
+
+  /// No description provided for @vibrant.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibrant'**
+  String get vibrant;
+
+  /// No description provided for @blackAndWhite.
+  ///
+  /// In en, this message translates to:
+  /// **'Black & White'**
+  String get blackAndWhite;
+
+  /// No description provided for @subtle.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtle'**
+  String get subtle;
+
+  /// No description provided for @vibrants.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibrants'**
+  String get vibrants;
 }
 
 class _AppLocalizationsDelegate

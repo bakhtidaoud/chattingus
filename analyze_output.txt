@@ -1,0 +1,35 @@
+﻿Analyzing chattingus...                                         
+
+warning - Unused import: 'package:flutter/material.dart' - lib\controllers\chats_controller.dart:1:8 - unused_import
+warning - Unused import: '../controllers/chats_controller.dart' - lib\screens\chats_screen.dart:4:8 - unused_import
+warning - Unused import: 'main_navigation_screen.dart' - lib\screens\login_screen.dart:6:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\profile_screen.dart:297:45 - deprecated_member_use
+warning - Unused import: 'package:get/get.dart' - lib\screens\reels_screen.dart:2:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\reels_screen.dart:102:35 - deprecated_member_use
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\screens\signup_screen.dart:135:32 - deprecated_member_use
+   info - Use interpolation to compose strings and values - lib\screens\signup_screen.dart:140:30 - prefer_interpolation_to_compose_strings
+   info - Use interpolation to compose strings and values - lib\screens\signup_screen.dart:148:30 - prefer_interpolation_to_compose_strings
+   info - Use interpolation to compose strings and values - lib\screens\signup_screen.dart:189:21 - prefer_interpolation_to_compose_strings
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:115:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:144:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:155:42 - deprecated_member_use
+
+flutter : 13 issues 
+found. (ran in 13.4s)
+At line:1 char:1
++ flutter analyze 
+--no-pub 2>&1 | 
+Out-File -FilePath 
+analyze_output.txt ...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (13 issues    
+ found. (ran in 13    
+.4s):String) [],     
+RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 

@@ -163,4 +163,73 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get camera => 'الكاميرا';
+
+  @override
+  String get posts => 'المنشورات';
+
+  @override
+  String get followers => 'المتابعون';
+
+  @override
+  String get following => 'المتابَعون';
+
+  @override
+  String get editProfile => 'تعديل الملف الشخصي';
+
+  @override
+  String get stories => 'القصص';
+
+  @override
+  String get tagged => 'الإشارات';
+
+  @override
+  String get bio => 'السيرة الذاتية';
+
+  @override
+  String get username => 'اسم المستخدم';
+
+  @override
+  String get feed => 'الخلاصة';
+
+  @override
+  String viewAllComments(Object count) {
+    return 'عرض جميع التعليقات ($count)';
+  }
+
+  @override
+  String get addComment => 'أضف تعليقاً...';
+
+  @override
+  String get workingOnProject =>
+      'أعمل على مشروع جديد. متحمس جداً لمشاركة المزيد قريباً! #برمجة #مطور';
+
+  @override
+  String get sendMessage => 'إرسال رسالة';
+
+  @override
+  String get addToStory => 'إضافة إلى القصة';
+
+  @override
+  String get story => 'قصة';
+
+  @override
+  String get reel => 'ريلز';
+
+  @override
+  String get live => 'مباشر';
+
+  @override
+  String get holdForVideo => 'اضغط مطولاً للفيديو، اضغط للصورة.';
+
+  @override
+  String get vibrant => 'نابض بالحياة';
+
+  @override
+  String get blackAndWhite => 'أبيض وأسود';
+
+  @override
+  String get subtle => 'هادئ';
+
+  @override
+  String get vibrants => 'نابضة';
 }

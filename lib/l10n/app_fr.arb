@@ -59,5 +59,19 @@
   "tagged": "Identifications",
   "bio": "Biographie",
   "username": "Nom d'utilisateur",
-  "settings": "Paramètres"
+  "settings": "Paramètres",
+  "feed": "Fil d'actualité",
+  "viewAllComments": "Voir les {count} commentaires",
+  "addComment": "Ajouter un commentaire...",
+  "workingOnProject": "Je travaille sur un nouveau projet. Très heureux de partager plus bientôt ! #codage #développeur",
+  "sendMessage": "Envoyer un message",
+  "addToStory": "Ajouter à la story",
+  "story": "Story",
+  "reel": "Reel",
+  "live": "En direct",
+  "holdForVideo": "Maintenez pour vidéo, appuyez pour photo.",
+  "vibrant": "Vibrant",
+  "blackAndWhite": "Noir & Blanc",
+  "subtle": "Subtil",
+  "vibrants": "Vibrants"
 }
