@@ -232,4 +232,67 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get vibrants => 'نابضة';
+
+  @override
+  String get searchPlaceholder => 'بحث';
+
+  @override
+  String get noResults => 'لا توجد نتائج';
+
+  @override
+  String get forgotPasswordTitle => 'نسيت كلمة المرور';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'أدخل بريدك الإلكتروني أو اسم المستخدم أو رقم الهاتف لإعادة تعيين كلمة المرور';
+
+  @override
+  String get emailUsernameOrPhone =>
+      'البريد الإلكتروني أو اسم المستخدم أو الهاتف';
+
+  @override
+  String get sendResetLink => 'إرسال رابط إعادة التعيين';
+
+  @override
+  String get backToLogin => 'العودة إلى تسجيل الدخول';
+
+  @override
+  String get resetLinkSent =>
+      'تم إرسال رابط إعادة التعيين! تحقق من بريدك الإلكتروني.';
+
+  @override
+  String get changePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get newPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get confirmNewPassword => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get enterNewPassword => 'أدخل كلمة المرور الجديدة';
+
+  @override
+  String get reEnterNewPassword => 'أعد إدخال كلمة المرور الجديدة';
+
+  @override
+  String get savePassword => 'حفظ كلمة المرور';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get charactersMin => '8+ أحرف';
+
+  @override
+  String get uppercaseLetter => 'حرف كبير واحد';
+
+  @override
+  String get oneNumber => 'رقم واحد';
+
+  @override
+  String get passwordsDoNotMatch => 'كلمات المرور غير متطابقة';
+
+  @override
+  String get passwordUpdated => 'تم تحديث كلمة المرور بنجاح!';
 }

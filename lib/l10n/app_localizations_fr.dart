@@ -232,4 +232,66 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get vibrants => 'Vibrants';
+
+  @override
+  String get searchPlaceholder => 'Rechercher';
+
+  @override
+  String get noResults => 'Aucun résultat trouvé';
+
+  @override
+  String get forgotPasswordTitle => 'Mot de passe oublié';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Entrez votre email, nom d\'utilisateur ou numéro de téléphone pour réinitialiser votre mot de passe';
+
+  @override
+  String get emailUsernameOrPhone => 'Email, Nom d\'utilisateur ou Téléphone';
+
+  @override
+  String get sendResetLink => 'Envoyer le lien de réinitialisation';
+
+  @override
+  String get backToLogin => 'Retour à la connexion';
+
+  @override
+  String get resetLinkSent =>
+      'Lien de réinitialisation envoyé ! Vérifiez votre email.';
+
+  @override
+  String get changePassword => 'Changer le mot de passe';
+
+  @override
+  String get newPassword => 'Nouveau mot de passe';
+
+  @override
+  String get confirmNewPassword => 'Confirmer le nouveau mot de passe';
+
+  @override
+  String get enterNewPassword => 'Entrez le nouveau mot de passe';
+
+  @override
+  String get reEnterNewPassword => 'Ressaisissez le nouveau mot de passe';
+
+  @override
+  String get savePassword => 'Enregistrer le mot de passe';
+
+  @override
+  String get cancel => 'Annuler';
+
+  @override
+  String get charactersMin => '8+ caractères';
+
+  @override
+  String get uppercaseLetter => '1 lettre majuscule';
+
+  @override
+  String get oneNumber => '1 chiffre';
+
+  @override
+  String get passwordsDoNotMatch => 'Les mots de passe ne correspondent pas';
+
+  @override
+  String get passwordUpdated => 'Mot de passe mis à jour avec succès !';
 }

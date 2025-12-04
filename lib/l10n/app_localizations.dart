@@ -543,6 +543,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vibrants'**
   String get vibrants;
+
+  /// No description provided for @searchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchPlaceholder;
+
+  /// No description provided for @noResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get noResults;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email, username, or phone number to reset your password'**
+  String get forgotPasswordSubtitle;
+
+  /// No description provided for @emailUsernameOrPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Email, Username, or Phone'**
+  String get emailUsernameOrPhone;
+
+  /// No description provided for @sendResetLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Reset Link'**
+  String get sendResetLink;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Login'**
+  String get backToLogin;
+
+  /// No description provided for @resetLinkSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset link sent! Check your email.'**
+  String get resetLinkSent;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @confirmNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm New Password'**
+  String get confirmNewPassword;
+
+  /// No description provided for @enterNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter new password'**
+  String get enterNewPassword;
+
+  /// No description provided for @reEnterNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter new password'**
+  String get reEnterNewPassword;
+
+  /// No description provided for @savePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Password'**
+  String get savePassword;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @charactersMin.
+  ///
+  /// In en, this message translates to:
+  /// **'8+ characters'**
+  String get charactersMin;
+
+  /// No description provided for @uppercaseLetter.
+  ///
+  /// In en, this message translates to:
+  /// **'1 uppercase letter'**
+  String get uppercaseLetter;
+
+  /// No description provided for @oneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'1 number'**
+  String get oneNumber;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated successfully!'**
+  String get passwordUpdated;
 }
 
 class _AppLocalizationsDelegate

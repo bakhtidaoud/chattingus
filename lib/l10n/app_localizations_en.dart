@@ -232,4 +232,65 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vibrants => 'Vibrants';
+
+  @override
+  String get searchPlaceholder => 'Search';
+
+  @override
+  String get noResults => 'No results found';
+
+  @override
+  String get forgotPasswordTitle => 'Forgot Password';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Enter your email, username, or phone number to reset your password';
+
+  @override
+  String get emailUsernameOrPhone => 'Email, Username, or Phone';
+
+  @override
+  String get sendResetLink => 'Send Reset Link';
+
+  @override
+  String get backToLogin => 'Back to Login';
+
+  @override
+  String get resetLinkSent => 'Reset link sent! Check your email.';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get confirmNewPassword => 'Confirm New Password';
+
+  @override
+  String get enterNewPassword => 'Enter new password';
+
+  @override
+  String get reEnterNewPassword => 'Re-enter new password';
+
+  @override
+  String get savePassword => 'Save Password';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get charactersMin => '8+ characters';
+
+  @override
+  String get uppercaseLetter => '1 uppercase letter';
+
+  @override
+  String get oneNumber => '1 number';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordUpdated => 'Password updated successfully!';
 }

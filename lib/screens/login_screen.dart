@@ -4,6 +4,7 @@ import '../l10n/app_localizations.dart';
 import '../controllers/login_controller.dart';
 import 'signup_screen.dart';
 import 'main_navigation_screen.dart';
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -74,31 +75,38 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Obx(() => TextField(
-                obscureText: !controller.isPasswordVisible.value,
-                decoration: InputDecoration(
-                  hintText: l10n.enterPassword,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      controller.isPasswordVisible.value
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+              Obx(
+                () => TextField(
+                  obscureText: !controller.isPasswordVisible.value,
+                  decoration: InputDecoration(
+                    hintText: l10n.enterPassword,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                    onPressed: controller.togglePasswordVisibility,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        controller.isPasswordVisible.value
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                      onPressed: controller.togglePasswordVisibility,
+                    ),
                   ),
                 ),
-              )),
+              ),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ForgotPasswordScreen(),
+                    ),
+                  ),
                   child: Text(l10n.forgotPassword),
                 ),
               ),
