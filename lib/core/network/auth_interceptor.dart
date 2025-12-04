@@ -1,0 +1,100 @@
+import 'package:dio/dio.dart';
+import 'package:get/get.dart'
+    as get_x; // Alias to avoid conflict if needed, though not strictly necessary here
+import 'package:flutter/foundation.dart';
+import '../services/token_storage_service.dart';
+import '../constants/api_constants.dart';
+
+class AuthInterceptor extends Interceptor {
+  final TokenStorageService _tokenService =
+      get_x.Get.find<TokenStorageService>();
+  final Dio _dio;
+
+  AuthInterceptor(this._dio);
+
+  @override
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    final token = await _tokenService.getAccessToken();
+    if (token != null) {
+      options.headers['Authorization'] = 'Bearer $token';
+    }
+    return handler.next(options);
+  }
+
+  @override
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    if (err.response?.statusCode == 401) {
+      // If the error is 401, try to refresh the token
+      final refreshToken = await _tokenService.getRefreshToken();
+
+      if (refreshToken != null) {
+        try {
+          // Create a new Dio instance to avoid circular dependency/interceptor loops
+          // or just use a basic request.
+          final refreshDio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
+
+          final response = await refreshDio.post(
+            '/token/refresh/',
+            data: {'refresh': refreshToken},
+          );
+
+          if (response.statusCode == 200) {
+            final newAccessToken = response.data['access'];
+            // If the backend returns a new refresh token, update it too.
+            // Often refresh endpoints only return access token.
+            // Assuming here we might want to keep the old refresh token if not returned.
+            // Adjust based on actual backend response.
+            final newRefreshToken = response.data['refresh'] ?? refreshToken;
+
+            await _tokenService.saveTokens(newAccessToken, newRefreshToken);
+
+            // Retry the original request with the new token
+            final opts = err.requestOptions;
+            opts.headers['Authorization'] = 'Bearer $newAccessToken';
+
+            final clonedRequest = await _dio.request(
+              opts.path,
+              options: Options(
+                method: opts.method,
+                headers: opts.headers,
+                extra: opts.extra,
+                responseType: opts.responseType,
+                contentType: opts.contentType,
+                validateStatus: opts.validateStatus,
+                receiveTimeout: opts.receiveTimeout,
+                sendTimeout: opts.sendTimeout,
+              ),
+              data: opts.data,
+              queryParameters: opts.queryParameters,
+              cancelToken: opts.cancelToken,
+              onReceiveProgress: opts.onReceiveProgress,
+            );
+
+            return handler.resolve(clonedRequest);
+          }
+        } catch (e) {
+          // Refresh failed
+          await _logout();
+        }
+      } else {
+        // No refresh token available
+        await _logout();
+      }
+    }
+    return handler.next(err);
+  }
+
+  Future<void> _logout() async {
+    await _tokenService.clearTokens();
+    // Navigate to login screen
+    // get_x.Get.offAllNamed('/login'); // Uncomment and adjust route when available
+    // For now, just print or handle as needed
+    debugPrint('Session expired. Please login again.');
+  }
+}

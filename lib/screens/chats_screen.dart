@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../l10n/app_localizations.dart';
-import '../controllers/chats_controller.dart';
+import '../controllers/chat_controller.dart';
 import '../controllers/settings_controller.dart';
 import 'chat_detail_screen.dart';
 
@@ -13,13 +13,17 @@ class ChatsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final ChatController controller = Get.put(ChatController());
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -66,7 +70,9 @@ class ChatsScreen extends StatelessWidget {
                   hintText: l10n.search,
                   prefixIcon: const Icon(Icons.search),
                   filled: true,
-                  fillColor: theme.brightness == Brightness.dark ? Colors.grey.shade900 : Colors.grey.shade200,
+                  fillColor: theme.brightness == Brightness.dark
+                      ? Colors.grey.shade900
+                      : Colors.grey.shade200,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -83,54 +89,60 @@ class ChatsScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
                   _StoryItem(name: l10n.yourStory, isUser: true),
-                  const _StoryItem(name: 'Sarah', imageUrl: 'https://i.pravatar.cc/150?u=1'),
-                  const _StoryItem(name: 'Mike', imageUrl: 'https://i.pravatar.cc/150?u=2'),
-                  const _StoryItem(name: 'Emily', imageUrl: 'https://i.pravatar.cc/150?u=3'),
-                  const _StoryItem(name: 'Anna', imageUrl: 'https://i.pravatar.cc/150?u=4'),
+                  const _StoryItem(
+                    name: 'Sarah',
+                    imageUrl: 'https://i.pravatar.cc/150?u=1',
+                  ),
+                  const _StoryItem(
+                    name: 'Mike',
+                    imageUrl: 'https://i.pravatar.cc/150?u=2',
+                  ),
+                  const _StoryItem(
+                    name: 'Emily',
+                    imageUrl: 'https://i.pravatar.cc/150?u=3',
+                  ),
+                  const _StoryItem(
+                    name: 'Anna',
+                    imageUrl: 'https://i.pravatar.cc/150?u=4',
+                  ),
                 ],
               ),
             ),
             const Divider(),
             Expanded(
-              child: ListView(
-                children: [
-                  _ChatItem(
-                    name: 'Alex Johnson',
-                    message: 'Hey, are we still on for lunch?',
-                    time: '2m',
-                    isUnread: true,
-                    imageUrl: 'https://i.pravatar.cc/150?u=5',
-                  ),
-                  _ChatItem(
-                    name: 'Design Team',
-                    message: "Sarah: Shared a file 'Project_Brief.pdf'",
-                    time: '10:30 AM',
-                    isUnread: true,
-                    isGroup: true,
-                  ),
-                  _ChatItem(
-                    name: 'Chris Lee',
-                    message: 'Sounds good! See you then.',
-                    time: 'Yesterday',
-                    imageUrl: 'https://i.pravatar.cc/150?u=6',
-                  ),
-                  ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.black,
-                      child: const Icon(Icons.video_collection, color: Colors.white),
-                    ),
-                    title: const Text('Reels Notifications', style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: const Text('New popular reel from @creator1'),
-                    trailing: const Text('Tuesday', style: TextStyle(color: Colors.grey)),
-                  ),
-                  _ChatItem(
-                    name: 'Emma Watson',
-                    message: 'typing...',
-                    time: 'Mon',
-                    imageUrl: 'https://i.pravatar.cc/150?u=7',
-                  ),
-                ],
-              ),
+              child: Obx(() {
+                if (controller.isLoadingChats.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (controller.chats.isEmpty) {
+                  return const Center(child: Text('No chats yet'));
+                }
+
+                return ListView.builder(
+                  itemCount: controller.chats.length,
+                  itemBuilder: (context, index) {
+                    final chat = controller.chats[index];
+                    final name =
+                        chat.name ??
+                        chat.participants.map((u) => u.username).join(', ');
+                    final message = chat.lastMessage?.content ?? '';
+                    // Simple time formatting
+                    final time =
+                        chat.lastMessage?.timestamp.hour.toString() ?? '';
+
+                    return _ChatItem(
+                      name: name,
+                      message: message,
+                      time: time,
+                      isUnread: !(chat.lastMessage?.isRead ?? true),
+                      imageUrl: chat.participants.isNotEmpty
+                          ? chat.participants.first.profilePicture
+                          : null,
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),
@@ -163,37 +175,42 @@ class ChatsScreen extends StatelessWidget {
               ),
             ),
             const Divider(),
-            Obx(() => Column(
-              children: [
-                _LanguageOption(
-                  flag: '🇬🇧',
-                  language: 'English',
-                  isSelected: settingsController.locale.value.languageCode == 'en',
-                  onTap: () {
-                    settingsController.updateLocale(const Locale('en'));
-                    Navigator.pop(context);
-                  },
-                ),
-                _LanguageOption(
-                  flag: '🇸🇦',
-                  language: 'العربية',
-                  isSelected: settingsController.locale.value.languageCode == 'ar',
-                  onTap: () {
-                    settingsController.updateLocale(const Locale('ar'));
-                    Navigator.pop(context);
-                  },
-                ),
-                _LanguageOption(
-                  flag: '🇫🇷',
-                  language: 'Français',
-                  isSelected: settingsController.locale.value.languageCode == 'fr',
-                  onTap: () {
-                    settingsController.updateLocale(const Locale('fr'));
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            )),
+            Obx(
+              () => Column(
+                children: [
+                  _LanguageOption(
+                    flag: '🇬🇧',
+                    language: 'English',
+                    isSelected:
+                        settingsController.locale.value.languageCode == 'en',
+                    onTap: () {
+                      settingsController.updateLocale(const Locale('en'));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  _LanguageOption(
+                    flag: '🇸🇦',
+                    language: 'العربية',
+                    isSelected:
+                        settingsController.locale.value.languageCode == 'ar',
+                    onTap: () {
+                      settingsController.updateLocale(const Locale('ar'));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  _LanguageOption(
+                    flag: '🇫🇷',
+                    language: 'Français',
+                    isSelected:
+                        settingsController.locale.value.languageCode == 'fr',
+                    onTap: () {
+                      settingsController.updateLocale(const Locale('fr'));
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -217,10 +234,7 @@ class _LanguageOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Text(
-        flag,
-        style: const TextStyle(fontSize: 32),
-      ),
+      leading: Text(flag, style: const TextStyle(fontSize: 32)),
       title: Text(
         language,
         style: TextStyle(
@@ -254,11 +268,15 @@ class _StoryItem extends StatelessWidget {
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: isUser ? null : Border.all(color: Colors.blue, width: 2),
+                  border: isUser
+                      ? null
+                      : Border.all(color: Colors.blue, width: 2),
                 ),
                 child: CircleAvatar(
                   radius: 30,
-                  backgroundImage: imageUrl != null ? NetworkImage(imageUrl!) : null,
+                  backgroundImage: imageUrl != null
+                      ? NetworkImage(imageUrl!)
+                      : null,
                   backgroundColor: Colors.grey.shade300,
                   child: imageUrl == null && isUser
                       ? const Icon(Icons.person, size: 30, color: Colors.white)
@@ -294,7 +312,6 @@ class _ChatItem extends StatelessWidget {
   final String time;
   final bool isUnread;
   final String? imageUrl;
-  final bool isGroup;
 
   const _ChatItem({
     required this.name,
@@ -302,18 +319,18 @@ class _ChatItem extends StatelessWidget {
     required this.time,
     this.isUnread = false,
     this.imageUrl,
-    this.isGroup = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => Get.to(() => ChatDetailScreen(name: name, imageUrl: imageUrl)),
+      onTap: () =>
+          Get.to(() => ChatDetailScreen(name: name, imageUrl: imageUrl)),
       leading: CircleAvatar(
         radius: 28,
         backgroundImage: imageUrl != null ? NetworkImage(imageUrl!) : null,
         backgroundColor: Colors.grey.shade300,
-        child: isGroup ? const Icon(Icons.group, color: Colors.white) : null,
+        child: null,
       ),
       title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Text(
@@ -321,7 +338,9 @@ class _ChatItem extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: isUnread ? Theme.of(context).textTheme.bodyMedium?.color : Colors.grey,
+          color: isUnread
+              ? Theme.of(context).textTheme.bodyMedium?.color
+              : Colors.grey,
           fontWeight: isUnread ? FontWeight.bold : FontWeight.normal,
         ),
       ),
@@ -329,7 +348,13 @@ class _ChatItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(time, style: TextStyle(color: isUnread ? Colors.blue : Colors.grey, fontSize: 12)),
+          Text(
+            time,
+            style: TextStyle(
+              color: isUnread ? Colors.blue : Colors.grey,
+              fontSize: 12,
+            ),
+          ),
           if (isUnread)
             Container(
               margin: const EdgeInsets.only(top: 4),

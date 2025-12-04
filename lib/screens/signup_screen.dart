@@ -61,37 +61,27 @@ class SignUpScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 32),
-              _CustomTextField(hintText: l10n.firstName),
+              _CustomTextField(
+                hintText: l10n.firstName,
+                controller: controller.firstNameController,
+              ),
               const SizedBox(height: 16),
-              _CustomTextField(hintText: l10n.lastName),
+              _CustomTextField(
+                hintText: l10n.lastName,
+                controller: controller.lastNameController,
+              ),
               const SizedBox(height: 16),
-              _CustomTextField(hintText: l10n.emailAddress),
+              _CustomTextField(
+                hintText: l10n.emailAddress,
+                controller: controller.emailController,
+              ),
               const SizedBox(height: 16),
               Container(
                 decoration: BoxDecoration(
                   color: theme.inputDecorationTheme.fillColor ?? Colors.grey.shade900,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.grey.shade800),
-                ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: '+1',
-                          items: ['+1', '+212', '+33'].map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value, style: TextStyle(color: theme.textTheme.bodyMedium?.color)),
-                            );
-                          }).toList(),
-                          onChanged: (_) {},
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: TextField(
+                        keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                           hintText: l10n.phoneNumber,
                           border: InputBorder.none,
@@ -104,7 +94,8 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Obx(() => _CustomTextField(
-                hintText: l10n.password, // Corrected key
+                hintText: l10n.password,
+                controller: controller.passwordController,
                 obscureText: !controller.isPasswordVisible.value,
                 suffixIcon: IconButton(
                   icon: Icon(
@@ -117,6 +108,7 @@ class SignUpScreen extends StatelessWidget {
               const SizedBox(height: 16),
               Obx(() => _CustomTextField(
                 hintText: l10n.confirmPassword,
+                controller: controller.confirmPasswordController,
                 obscureText: !controller.isConfirmPasswordVisible.value,
                 suffixIcon: IconButton(
                   icon: Icon(
@@ -160,11 +152,11 @@ class SignUpScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 32),
-              SizedBox(
+              Obx(() => SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: controller.signup,
+                  onPressed: controller.isLoading.value ? null : controller.signup,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
@@ -172,15 +164,24 @@ class SignUpScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: Text(
-                    l10n.signUp,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: controller.isLoading.value
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : Text(
+                          l10n.signUp,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
-              ),
+              )),
               const SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -216,18 +217,24 @@ class _CustomTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final Widget? suffixIcon;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
 
   const _CustomTextField({
     required this.hintText,
     this.obscureText = false,
     this.suffixIcon,
+    this.controller,
+    this.keyboardType,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return TextField(
+      controller: controller,
       obscureText: obscureText,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         hintText: hintText,
         filled: true,

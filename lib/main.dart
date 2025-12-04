@@ -8,7 +8,36 @@ import 'controllers/settings_controller.dart';
 import 'screens/splash_screen.dart';
 import 'screens/change_password_screen.dart';
 
-void main() {
+// Import services
+import 'core/services/token_storage_service.dart';
+import 'core/network/api_client.dart';
+import 'core/services/auth_service.dart';
+import 'core/services/user_service.dart';
+import 'core/services/post_service.dart';
+import 'core/services/chat_service.dart';
+
+// Import controllers
+import 'controllers/user_profile_controller.dart';
+import 'controllers/feed_controller.dart';
+import 'controllers/chat_controller.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize services
+  await Get.putAsync(() async => TokenStorageService());
+  Get.put(ApiClient());
+  Get.put(AuthService());
+  Get.put(UserService());
+  Get.put(PostService());
+  Get.put(ChatService());
+
+  // Initialize controllers
+  Get.put(SettingsController());
+  Get.put(UserProfileController());
+  Get.put(FeedController());
+  Get.put(ChatController());
+
   runApp(const MyApp());
 }
 
@@ -90,8 +119,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize the controller
-    final SettingsController settingsController = Get.put(SettingsController());
+    // Get the controller (already initialized in main)
+    final SettingsController settingsController =
+        Get.find<SettingsController>();
 
     return Obx(
       () => GetMaterialApp(

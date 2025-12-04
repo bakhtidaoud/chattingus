@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../l10n/app_localizations.dart';
 import '../controllers/login_controller.dart';
 import 'signup_screen.dart';
-import 'main_navigation_screen.dart';
+
 import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -14,6 +14,9 @@ class LoginScreen extends StatelessWidget {
     final LoginController controller = Get.put(LoginController());
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
       body: SafeArea(
@@ -56,6 +59,7 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                   hintText: l10n.enterEmail,
                   border: OutlineInputBorder(
@@ -77,6 +81,7 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 8),
               Obx(
                 () => TextField(
+                  controller: passwordController,
                   obscureText: !controller.isPasswordVisible.value,
                   decoration: InputDecoration(
                     hintText: l10n.enterPassword,
@@ -114,21 +119,32 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 height: 56,
-                child: ElevatedButton(
-                  onPressed: controller.login,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // As per design
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                child: Obx(
+                  () => ElevatedButton(
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : () {
+                            controller.login(
+                              emailController.text,
+                              passwordController.text,
+                            );
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue, // As per design
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    l10n.logIn,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    child: controller.isLoading.value
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            l10n.logIn,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
               ),
