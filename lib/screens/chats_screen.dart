@@ -124,21 +124,21 @@ class ChatsScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final chat = controller.chats[index];
                     final name =
-                        chat.name ??
-                        chat.participants.map((u) => u.username).join(', ');
+                        chat.name ?? chat.participantsUsernames.join(', ');
                     final message = chat.lastMessage?.content ?? '';
                     // Simple time formatting
-                    final time =
-                        chat.lastMessage?.timestamp.hour.toString() ?? '';
+                    final time = chat.lastMessage != null
+                        ? '${chat.lastMessage!.createdAt.hour}:${chat.lastMessage!.createdAt.minute.toString().padLeft(2, '0')}'
+                        : '';
 
                     return _ChatItem(
                       name: name,
                       message: message,
                       time: time,
-                      isUnread: !(chat.lastMessage?.isRead ?? true),
-                      imageUrl: chat.participants.isNotEmpty
-                          ? chat.participants.first.profilePicture
-                          : null,
+                      isUnread:
+                          false, // TODO: Add isRead field to LastMessage model if needed
+                      imageUrl:
+                          null, // TODO: Fetch user profile pictures based on participantsUsernames
                     );
                   },
                 );

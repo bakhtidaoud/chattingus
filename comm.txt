@@ -1,0 +1,8 @@
+ dart pub global activate flutterfire_cli
+
+
+ dart pub global deactivate flutterfire_cli
+
+
+
+ dart pub global run flutterfire_cli:configure --project=chattingus-c4b25

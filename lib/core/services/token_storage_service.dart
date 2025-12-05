@@ -6,6 +6,7 @@ class TokenStorageService extends GetxService {
 
   static const _accessTokenKey = 'access_token';
   static const _refreshTokenKey = 'refresh_token';
+  static const _fcmTokenKey = 'fcm_token';
 
   Future<void> saveTokens(String accessToken, String refreshToken) async {
     await _storage.write(key: _accessTokenKey, value: accessToken);
@@ -23,5 +24,18 @@ class TokenStorageService extends GetxService {
   Future<void> clearTokens() async {
     await _storage.delete(key: _accessTokenKey);
     await _storage.delete(key: _refreshTokenKey);
+  }
+
+  // FCM Token methods
+  Future<void> saveFCMToken(String fcmToken) async {
+    await _storage.write(key: _fcmTokenKey, value: fcmToken);
+  }
+
+  Future<String?> getFCMToken() async {
+    return await _storage.read(key: _fcmTokenKey);
+  }
+
+  Future<void> clearFCMToken() async {
+    await _storage.delete(key: _fcmTokenKey);
   }
 }

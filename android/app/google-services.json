@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "430070391026",
+    "project_id": "chattingus-c4b25",
+    "storage_bucket": "chattingus-c4b25.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430070391026:android:cc0fb46269674b940e706b",
+        "android_client_info": {
+          "package_name": "com.example.chattingus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0m8e9X78kCY8FW_x5i8IVdVP9SMbHviQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

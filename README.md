@@ -30,13 +30,39 @@
 - **Persistent Selection** - Your language choice is saved
 - **Full Localization** - All UI elements properly translated
 
+### 🔥 **Firebase Integration**
+- **Firebase Cloud Messaging (FCM)** - Real-time push notifications
+- **Background Message Handling** - Receive notifications even when app is closed
+- **Notification Service** - Comprehensive notification management system
+- **Token Management** - Automatic FCM token refresh and synchronization
+
+### 🔐 **Authentication & Security**
+- **JWT Authentication** - Secure token-based authentication
+- **Secure Storage** - Encrypted token storage using flutter_secure_storage
+- **Deep Linking** - Password reset via email links (chatting-us.com/editpassword)
+- **Auto-login** - Persistent authentication state
+
+### 🌐 **Backend Integration**
+- **Django REST API** - Full integration with Django backend
+- **RESTful Services** - Auth, User, Post, Chat, Search services
+- **Real-time Updates** - Live data synchronization
+- **Error Handling** - Comprehensive error management and user feedback
+
 ### 📱 **Core Screens**
 
-#### 🏠 **Home/Chats**
-- Clean chat list interface
+#### 🏠 **Home/Feed**
+- Instagram-style post feed
+- Create, like, and comment on posts
+- Image upload with camera/gallery
+- Pull-to-refresh functionality
+- Infinite scroll pagination
+
+#### 💬 **Chats**
+- Real-time messaging
+- Chat list with unread indicators
 - Story carousel at the top
 - Search functionality
-- Language switcher
+- Group and direct messages
 
 #### 🎬 **Reels**
 - Full-screen vertical video feed
@@ -50,10 +76,12 @@
 - Bio and username display
 - Tab navigation (Posts, Reels, Stories, Tagged)
 - 3-column grid layout for posts
-- Edit Profile button
+- Edit Profile functionality
 
 #### 🔍 **Explore**
-- Discover new content (coming soon)
+- Discover new users and content
+- Search functionality
+- Trending posts and reels
 
 ### 🎭 **Animations & Interactions**
 - **Splash Screen** - Fade-in and elastic scale animations
@@ -62,10 +90,13 @@
 - **Bottom Sheets** - Elegant slide-up animations
 
 ### 🛠️ **Technical Features**
-- **GetX State Management** - Reactive and efficient
-- **Persistent Storage** - SharedPreferences for settings
-- **Clean Architecture** - Organized code structure
+- **GetX State Management** - Reactive and efficient state management
+- **Clean Architecture** - Organized service-based architecture
+- **Persistent Storage** - SharedPreferences for settings, Secure Storage for tokens
 - **Material 3 Design** - Latest Flutter design system
+- **Permission Handling** - Camera, storage, and notification permissions
+- **Image Picker** - Camera and gallery integration
+- **Dio HTTP Client** - Advanced networking with interceptors
 
 ---
 
@@ -89,9 +120,27 @@
 
 ### Prerequisites
 - Flutter SDK (3.8 or higher)
-- Dart SDK (3.0 or higher)
+- Dart SDK (3.8.1 or higher)
 - Android Studio / VS Code
 - Git
+- Firebase account and project setup
+- Django backend server (for full functionality)
+
+### Firebase Setup
+1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
+2. Add Android and iOS apps to your Firebase project
+3. Download `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)
+4. Place configuration files in respective platform directories
+5. Run FlutterFire CLI to configure:
+```bash
+flutter pub global activate flutterfire_cli
+flutterfire configure --project=your-project-id
+```
+
+### Backend Configuration
+1. Ensure your Django backend is running
+2. Update API base URL in `lib/core/network/api_client.dart`
+3. Configure deep linking domain in `AndroidManifest.xml` and iOS settings
 
 ### Clone the Repository
 ```bash
@@ -109,10 +158,14 @@ flutter pub get
 # Run on connected device/emulator
 flutter run
 
-# Run on specific platform
-flutter run -d windows
-flutter run -d android
-flutter run -d ios
+# Build release APK (Android)
+flutter build apk --release
+
+# Build release bundle (Android)
+flutter build appbundle --release
+
+# Build iOS
+flutter build ios --release
 ```
 
 ---
@@ -177,25 +230,48 @@ flutter pub get
 
 ```
 lib/
-├── controllers/          # GetX controllers for state management
-│   ├── chats_controller.dart
+├── core/                      # Core functionality
+│   ├── models/                # Data models
+│   │   ├── user.dart
+│   │   ├── post.dart
+│   │   ├── chat.dart
+│   │   └── message.dart
+│   ├── network/               # Networking layer
+│   │   └── api_client.dart    # Dio HTTP client with interceptors
+│   └── services/              # Business logic services
+│       ├── auth_service.dart          # Authentication & JWT
+│       ├── user_service.dart          # User management
+│       ├── post_service.dart          # Posts & feed
+│       ├── chat_service.dart          # Messaging
+│       ├── notification_service.dart  # FCM notifications
+│       ├── search_service.dart        # Search functionality
+│       ├── permission_service.dart    # Permission handling
+│       └── token_storage_service.dart # Secure token storage
+├── controllers/               # GetX state management
+│   ├── settings_controller.dart
 │   ├── login_controller.dart
-│   └── settings_controller.dart
-├── l10n/                # Localization files
+│   ├── signup_controller.dart
+│   ├── user_profile_controller.dart
+│   ├── feed_controller.dart
+│   └── chat_controller.dart
+├── l10n/                      # Localization files
 │   ├── app_en.arb
 │   ├── app_ar.arb
 │   └── app_fr.arb
-├── screens/             # UI screens
+├── screens/                   # UI screens
 │   ├── splash_screen.dart
 │   ├── login_screen.dart
 │   ├── signup_screen.dart
 │   ├── main_navigation_screen.dart
 │   ├── chats_screen.dart
+│   ├── chat_detail_screen.dart
+│   ├── feed_screen.dart
 │   ├── reels_screen.dart
 │   ├── explore_screen.dart
 │   ├── profile_screen.dart
-│   └── chat_detail_screen.dart
-└── main.dart           # App entry point
+│   └── change_password_screen.dart
+├── firebase_options.dart      # Firebase configuration
+└── main.dart                  # App entry point
 ```
 
 ---
@@ -233,29 +309,70 @@ flutter:
 - **flutter_localizations** - Internationalization support
 - **intl** (^0.20.2) - Internationalization utilities
 
+### Firebase
+- **firebase_core** (^2.24.0) - Firebase core functionality
+- **firebase_messaging** (^14.7.0) - Push notifications (FCM)
+
+### Networking & Storage
+- **dio** (^5.4.0) - Advanced HTTP client
+- **flutter_secure_storage** (^9.0.0) - Encrypted storage for tokens
+- **json_annotation** (^4.8.1) - JSON serialization annotations
+
+### Media & Permissions
+- **image_picker** (^1.1.2) - Camera and gallery access
+- **camera** (^0.11.0+2) - Camera functionality
+- **permission_handler** (^11.3.1) - Runtime permissions
+
+### Deep Linking & UI
+- **app_links** (^6.3.2) - Deep linking support
+- **fluttertoast** (^8.2.4) - Toast notifications
+- **cupertino_icons** (^1.0.8) - iOS-style icons
+
 ### Dev Dependencies
 - **flutter_test** - Testing framework
 - **flutter_lints** (^5.0.0) - Linting rules
+- **build_runner** (^2.4.8) - Code generation
+- **json_serializable** (^6.7.1) - JSON serialization code generation
 
 ---
 
 ## 🎯 Roadmap
 
+### ✅ Completed
 - [x] Instagram-style UI design
 - [x] Bottom navigation with 5 tabs
 - [x] Animated splash screen
 - [x] Theme switching (dark/light)
 - [x] Multi-language support (EN, AR, FR)
 - [x] Profile screen with tabs
+- [x] Feed screen with posts
 - [x] Reels screen layout
-- [ ] Real-time chat functionality
+- [x] User authentication (JWT)
+- [x] Backend integration (Django REST API)
+- [x] Push notifications (FCM)
+- [x] Direct messaging
+- [x] Post creation and upload
+- [x] Deep linking (password reset)
+- [x] Secure token storage
+- [x] Real-time notifications
+- [x] Search functionality
+- [x] Permission handling
+
+### 🚧 In Progress
 - [ ] Video playback in Reels
-- [ ] Post creation and upload
-- [ ] User authentication
-- [ ] Backend integration
-- [ ] Push notifications
 - [ ] Stories feature
-- [ ] Direct messaging
+- [ ] Group chat functionality
+- [ ] WebSocket real-time messaging
+
+### 📋 Planned
+- [ ] Voice messages
+- [ ] Video calls
+- [ ] Story replies
+- [ ] Advanced search filters
+- [ ] User blocking/reporting
+- [ ] Media compression
+- [ ] Offline mode
+- [ ] Analytics integration
 
 ---
 
@@ -279,9 +396,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
+**Daoud Bakhti**
+- GitHub: [@bakhtidaoud](https://github.com/bakhtidaoud)
+- Project: ChattingUs - Modern Social Media Platform
 
 ---
 

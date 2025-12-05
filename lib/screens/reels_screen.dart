@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../l10n/app_localizations.dart';
 
 class ReelsScreen extends StatelessWidget {
@@ -33,7 +32,10 @@ class ReelsScreen extends StatelessWidget {
           // Top bar
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -89,10 +91,7 @@ class _ReelItem extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Colors.grey.shade800,
-                Colors.grey.shade900,
-              ],
+              colors: [Colors.grey.shade800, Colors.grey.shade900],
             ),
           ),
           child: Center(
@@ -121,11 +120,7 @@ class _ReelItem extends StatelessWidget {
                 onTap: () {},
               ),
               const SizedBox(height: 24),
-              _InteractionButton(
-                icon: Icons.send,
-                label: shares,
-                onTap: () {},
-              ),
+              _InteractionButton(icon: Icons.send, label: shares, onTap: () {}),
               const SizedBox(height: 24),
               _InteractionButton(
                 icon: Icons.more_horiz,
@@ -148,7 +143,11 @@ class _ReelItem extends StatelessWidget {
                   CircleAvatar(
                     radius: 18,
                     backgroundColor: Colors.grey.shade700,
-                    child: const Icon(Icons.person, color: Colors.white, size: 20),
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Text(
@@ -164,7 +163,10 @@ class _ReelItem extends StatelessWidget {
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.white),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
@@ -182,10 +184,7 @@ class _ReelItem extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 caption,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                ),
+                style: const TextStyle(color: Colors.white, fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -214,11 +213,7 @@ class _InteractionButton extends StatelessWidget {
       onTap: onTap,
       child: Column(
         children: [
-          Icon(
-            icon,
-            color: Colors.white,
-            size: 28,
-          ),
+          Icon(icon, color: Colors.white, size: 28),
           if (label.isNotEmpty) ...[
             const SizedBox(height: 4),
             Text(

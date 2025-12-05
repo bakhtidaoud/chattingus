@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../core/services/auth_service.dart';
+import '../core/services/toast_service.dart';
 import '../screens/login_screen.dart';
 
 class SignUpController extends GetxController {
@@ -51,10 +52,8 @@ class SignUpController extends GetxController {
   Future<void> signup() async {
     // Validation
     if (!isAgreed.value) {
-      Get.snackbar(
-        'Error',
+      ToastService.showError(
         'Please agree to the Terms of Service and Privacy Policy',
-        snackPosition: SnackPosition.BOTTOM,
       );
       return;
     }
@@ -65,29 +64,17 @@ class SignUpController extends GetxController {
         phoneNumberController.text.isEmpty ||
         passwordController.text.isEmpty ||
         confirmPasswordController.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all fields',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      ToastService.showError('Please fill in all fields');
       return;
     }
 
     if (passwordController.text != confirmPasswordController.text) {
-      Get.snackbar(
-        'Error',
-        'Passwords do not match',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      ToastService.showError('Passwords do not match');
       return;
     }
 
     if (passwordController.text.length < 6) {
-      Get.snackbar(
-        'Error',
-        'Password must be at least 6 characters',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      ToastService.showError('Password must be at least 6 characters');
       return;
     }
 
@@ -107,24 +94,12 @@ class SignUpController extends GetxController {
         phoneNumber: '${countryCode.value}${phoneNumberController.text.trim()}',
       );
 
-      Get.snackbar(
-        'Success',
-        'Account created successfully! Please login.',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+      ToastService.showSuccess('Account created successfully! Please login.');
 
       // Navigate to login screen
       Get.off(() => const LoginScreen());
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Registration failed: ${e.toString()}',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      ToastService.showError('Registration failed: ${e.toString()}');
     } finally {
       isLoading.value = false;
     }

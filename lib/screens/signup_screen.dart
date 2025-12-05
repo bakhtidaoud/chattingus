@@ -76,56 +76,57 @@ class SignUpScreen extends StatelessWidget {
                 controller: controller.emailController,
               ),
               const SizedBox(height: 16),
-              Container(
-                decoration: BoxDecoration(
-                  color: theme.inputDecorationTheme.fillColor ?? Colors.grey.shade900,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.shade800),
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                          hintText: l10n.phoneNumber,
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                        ),
-                      ),
+              _CustomTextField(
+                hintText: l10n.phoneNumber,
+                controller: controller.phoneNumberController,
+                keyboardType: TextInputType.phone,
+              ),
+              const SizedBox(height: 16),
+              Obx(
+                () => _CustomTextField(
+                  hintText: l10n.password,
+                  controller: controller.passwordController,
+                  obscureText: !controller.isPasswordVisible.value,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      controller.isPasswordVisible.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.grey,
                     ),
-                  ],
+                    onPressed: controller.togglePasswordVisibility,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
-              Obx(() => _CustomTextField(
-                hintText: l10n.password,
-                controller: controller.passwordController,
-                obscureText: !controller.isPasswordVisible.value,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    controller.isPasswordVisible.value ? Icons.visibility : Icons.visibility_off,
-                    color: Colors.grey,
+              Obx(
+                () => _CustomTextField(
+                  hintText: l10n.confirmPassword,
+                  controller: controller.confirmPasswordController,
+                  obscureText: !controller.isConfirmPasswordVisible.value,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      controller.isConfirmPasswordVisible.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.grey,
+                    ),
+                    onPressed: controller.toggleConfirmPasswordVisibility,
                   ),
-                  onPressed: controller.togglePasswordVisibility,
                 ),
-              )),
-              const SizedBox(height: 16),
-              Obx(() => _CustomTextField(
-                hintText: l10n.confirmPassword,
-                controller: controller.confirmPasswordController,
-                obscureText: !controller.isConfirmPasswordVisible.value,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    controller.isConfirmPasswordVisible.value ? Icons.visibility : Icons.visibility_off,
-                    color: Colors.grey,
-                  ),
-                  onPressed: controller.toggleConfirmPasswordVisibility,
-                ),
-              )),
+              ),
               const SizedBox(height: 24),
               Row(
                 children: [
-                  Obx(() => Checkbox(
-                    value: controller.isAgreed.value,
-                    onChanged: (value) => controller.toggleAgreement(),
-                    fillColor: MaterialStateProperty.all(Colors.grey.shade800),
-                  )),
+                  Obx(
+                    () => Checkbox(
+                      value: controller.isAgreed.value,
+                      onChanged: (value) => controller.toggleAgreement(),
+                      fillColor: MaterialStateProperty.all(
+                        Colors.grey.shade800,
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: Wrap(
                       children: [
@@ -152,36 +153,42 @@ class SignUpScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 32),
-              Obx(() => SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: controller.isLoading.value ? null : controller.signup,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+              Obx(
+                () => SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : controller.signup,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
+                    child: controller.isLoading.value
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            l10n.signUp,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
-                  child: controller.isLoading.value
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                          ),
-                        )
-                      : Text(
-                          l10n.signUp,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                 ),
-              )),
+              ),
               const SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -238,7 +245,9 @@ class _CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         filled: true,
-        fillColor: theme.brightness == Brightness.dark ? Colors.grey.shade900 : Colors.grey.shade200,
+        fillColor: theme.brightness == Brightness.dark
+            ? Colors.grey.shade900
+            : Colors.grey.shade200,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,

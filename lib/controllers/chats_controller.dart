@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../screens/feed_screen.dart';
 import '../screens/chats_screen.dart';

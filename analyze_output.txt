@@ -1,35 +1,123 @@
 ﻿Analyzing chattingus...                                         
 
+warning - Unused import: 'core/services/user_service.dart' - lib\api_usage_examples.dart:7:8 - unused_import
+warning - Unused import: 'core/services/post_service.dart' - lib\api_usage_examples.dart:8:8 - unused_import
+warning - Unused import: 'core/services/chat_service.dart' - lib\api_usage_examples.dart:9:8 - unused_import
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:37:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:39:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:49:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:51:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:59:3 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:74:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:75:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:76:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:77:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:78:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:79:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:93:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:95:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:104:3 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:106:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:121:3 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:124:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:125:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:133:3 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:147:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:149:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:157:3 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:166:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:168:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:182:3 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:185:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:187:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:199:3 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:201:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\api_usage_examples.dart:210:3 - avoid_print
+   info - Parameter 'key' could be a super parameter - lib\api_usage_examples.dart:219:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter - lib\api_usage_examples.dart:261:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter - lib\api_usage_examples.dart:336:9 - use_super_parameters
+  error - The getter 'isLoading' isn't defined for the type 'ChatController' - lib\api_usage_examples.dart:343:22 - undefined_getter
 warning - Unused import: 'package:flutter/material.dart' - lib\controllers\chats_controller.dart:1:8 - unused_import
-warning - Unused import: '../controllers/chats_controller.dart' - lib\screens\chats_screen.dart:4:8 - unused_import
-warning - Unused import: 'main_navigation_screen.dart' - lib\screens\login_screen.dart:6:8 - unused_import
+   info - The member 'refresh' overrides an inherited member but isn't annotated with '@override' - lib\controllers\search_controller.dart:158:16 - annotate_overrides
+  error - The named parameter 'options' isn't defined - lib\core\services\notification_service.dart:55:9 - undefined_named_parameter
+  error - The named parameter 'options' isn't defined - lib\core\services\notification_service.dart:80:9 - undefined_named_parameter
+warning - The value of the local variable 'notificationId' isn't used - lib\core\services\notification_service.dart:184:11 - unused_local_variable
+  error - Undefined name 'firebaseMessagingBackgroundHandler' - lib\main.dart:36:41 - undefined_identifier
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\add_story_screen.dart:334:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\add_story_screen.dart:337:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\add_story_screen.dart:360:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\add_story_screen.dart:380:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\add_story_screen.dart:400:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\add_story_screen.dart:418:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\add_story_screen.dart:570:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\add_story_screen.dart:623:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\add_story_screen.dart:684:36 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\change_password_screen.dart:147:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\change_password_screen.dart:376:25 - deprecated_member_use
+  error - The getter 'participants' isn't defined for the type 'Chat' - lib\screens\chats_screen.dart:128:30 - undefined_getter
+  error - The getter 'timestamp' isn't defined for the type 'LastMessage' - lib\screens\chats_screen.dart:132:43 - undefined_getter
+  error - The getter 'isRead' isn't defined for the type 'LastMessage' - lib\screens\chats_screen.dart:138:53 - undefined_getter
+  error - The getter 'participants' isn't defined for the type 'Chat' - lib\screens\chats_screen.dart:139:38 - undefined_getter
+  error - The getter 'participants' isn't defined for the type 'Chat' - lib\screens\chats_screen.dart:140:34 - undefined_getter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\explore_screen.dart:216:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\explore_screen.dart:235:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\forgot_password_screen.dart:220:25 - deprecated_member_use
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\profile_screen.dart:297:45 - deprecated_member_use
 warning - Unused import: 'package:get/get.dart' - lib\screens\reels_screen.dart:2:8 - unused_import
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\reels_screen.dart:102:35 - deprecated_member_use
-   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\screens\signup_screen.dart:135:32 - deprecated_member_use
+  error - The named parameter 'keyboardType' isn't defined - lib\screens\signup_screen.dart:84:25 - undefined_named_parameter
+  error - The named parameter 'decoration' isn't defined - lib\screens\signup_screen.dart:85:25 - undefined_named_parameter
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\screens\signup_screen.dart:127:32 - deprecated_member_use
+   info - Use interpolation to compose strings and values - lib\screens\signup_screen.dart:132:30 - prefer_interpolation_to_compose_strings
    info - Use interpolation to compose strings and values - lib\screens\signup_screen.dart:140:30 - prefer_interpolation_to_compose_strings
-   info - Use interpolation to compose strings and values - lib\screens\signup_screen.dart:148:30 - prefer_interpolation_to_compose_strings
-   info - Use interpolation to compose strings and values - lib\screens\signup_screen.dart:189:21 - prefer_interpolation_to_compose_strings
+   info - Use interpolation to compose strings and values - lib\screens\signup_screen.dart:190:21 - prefer_interpolation_to_compose_strings
+  error - Expected an identifier - lib\screens\signup_screen.dart:208:13 - missing_identifier
+  error - Expected to find ')' - lib\screens\signup_screen.dart:208:13 - expected_token
+  error - Expected to find ';' - lib\screens\signup_screen.dart:210:9 - expected_token
+warning - Dead code - lib\screens\signup_screen.dart:210:10 - dead_code
+  error - Expected an identifier - lib\screens\signup_screen.dart:210:10 - missing_identifier
+  error - Expected to find ';' - lib\screens\signup_screen.dart:210:10 - expected_token
+  error - Unexpected text ';' - lib\screens\signup_screen.dart:210:10 - unexpected_token
+  error - Expected an identifier - lib\screens\signup_screen.dart:211:7 - missing_identifier
+  error - Expected to find ';' - lib\screens\signup_screen.dart:211:7 - expected_token
+  error - Unexpected text ';' - lib\screens\signup_screen.dart:211:7 - unexpected_token
+  error - Expected an identifier - lib\screens\signup_screen.dart:211:8 - missing_identifier
+  error - Expected to find ';' - lib\screens\signup_screen.dart:211:8 - expected_token
+  error - Unexpected text ';' - lib\screens\signup_screen.dart:211:8 - unexpected_token
+  error - Expected an identifier - lib\screens\signup_screen.dart:212:5 - missing_identifier
+  error - Unexpected text ';' - lib\screens\signup_screen.dart:212:5 - unexpected_token
+   info - Unnecessary empty statement - lib\screens\signup_screen.dart:212:6 - empty_statements
+warning - A value for optional parameter 'keyboardType' isn't ever given - lib\screens\signup_screen.dart:228:10 - unused_element_parameter
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:115:51 - deprecated_member_use
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:144:47 - deprecated_member_use
    info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\splash_screen.dart:155:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\story_viewer_screen.dart:159:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\story_viewer_screen.dart:162:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\story_viewer_screen.dart:186:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\story_viewer_screen.dart:266:55 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\story_viewer_screen.dart:298:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\story_viewer_screen.dart:306:55 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\story_viewer_screen.dart:313:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\story_viewer_screen.dart:329:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\story_viewer_screen.dart:335:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\story_viewer_screen.dart:346:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\story_viewer_screen.dart:352:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\search_widgets.dart:249:43 - deprecated_member_use
 
-flutter : 13 issues 
-found. (ran in 13.4s)
+flutter : 103 issues found. 
+(ran in 5.2s)
 At line:1 char:1
-+ flutter analyze 
---no-pub 2>&1 | 
++ flutter analyze 2>&1 | 
 Out-File -FilePath 
-analyze_output.txt ...
+analyze_output.txt -Encodin 
+...
 + ~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~
-    + CategoryInfo    
-          : NotSpeci  
-  fied: (13 issues    
- found. (ran in 13    
-.4s):String) [],     
+    + CategoryInfo           
+   : NotSpeci    fied: (103 
+issues     found. (ran in 5  
+  .2s):String) [],     
 RemoteException
-    + FullyQualifiedE 
-   rrorId : NativeCo  
-  mmandError
+    + FullyQualifiedE    
+rrorId : NativeCo    
+mmandError
  

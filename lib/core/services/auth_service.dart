@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import '../network/api_client.dart';
 import 'token_storage_service.dart';
+import 'notification_service.dart';
 
 class AuthService extends GetxService {
   final ApiClient _apiClient = Get.find<ApiClient>();
@@ -31,6 +32,18 @@ class AuthService extends GetxService {
         final refreshToken = response.data['refresh'];
         await _tokenService.saveTokens(accessToken, refreshToken);
         isLoggedIn.value = true;
+
+        // Register FCM token after successful login
+        try {
+          final notificationService = Get.find<NotificationService>();
+          final fcmToken = await notificationService.getFCMToken();
+          if (fcmToken != null) {
+            await notificationService.registerFCMToken(fcmToken, accessToken);
+          }
+        } catch (e) {
+          // Don't fail login if notification registration fails
+          debugPrint('Failed to register FCM token: $e');
+        }
       } else {
         throw Exception('Login failed: ${response.statusMessage}');
       }
@@ -78,6 +91,20 @@ class AuthService extends GetxService {
   }
 
   Future<void> logout() async {
+    // Unregister FCM token before logout
+    try {
+      final notificationService = Get.find<NotificationService>();
+      final fcmToken = await _tokenService.getFCMToken();
+      final accessToken = await _tokenService.getAccessToken();
+
+      if (fcmToken != null && accessToken != null) {
+        await notificationService.unregisterFCMToken(fcmToken, accessToken);
+      }
+    } catch (e) {
+      // Don't fail logout if notification unregistration fails
+      debugPrint('Failed to unregister FCM token: $e');
+    }
+
     await _tokenService.clearTokens();
     isLoggedIn.value = false;
     // Navigate to login screen

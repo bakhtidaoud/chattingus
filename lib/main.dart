@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'dart:async';
-import 'package:uni_links/uni_links.dart';
+import 'package:app_links/app_links.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 import 'controllers/settings_controller.dart';
 import 'screens/splash_screen.dart';
@@ -15,6 +18,10 @@ import 'core/services/auth_service.dart';
 import 'core/services/user_service.dart';
 import 'core/services/post_service.dart';
 import 'core/services/chat_service.dart';
+import 'core/services/notification_service.dart'
+    show NotificationService, firebaseMessagingBackgroundHandler;
+import 'core/services/search_service.dart';
+import 'core/services/permission_service.dart';
 
 // Import controllers
 import 'controllers/user_profile_controller.dart';
@@ -24,6 +31,12 @@ import 'controllers/chat_controller.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Set up background message handler
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   // Initialize services
   await Get.putAsync(() async => TokenStorageService());
   Get.put(ApiClient());
@@ -31,6 +44,16 @@ Future<void> main() async {
   Get.put(UserService());
   Get.put(PostService());
   Get.put(ChatService());
+
+  // Initialize NotificationService
+  final notificationService = Get.put(NotificationService());
+  await notificationService.initialize();
+
+  // Initialize SearchService
+  Get.put(SearchService());
+
+  // Initialize PermissionService
+  Get.put(PermissionService());
 
   // Initialize controllers
   Get.put(SettingsController());
@@ -49,7 +72,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  StreamSubscription? _sub;
+  late AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSubscription;
 
   @override
   void initState() {
@@ -59,27 +83,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    _sub?.cancel();
+    _linkSubscription?.cancel();
     super.dispose();
   }
 
   Future<void> _initDeepLinks() async {
+    _appLinks = AppLinks();
+
     // Handle initial link if app was opened from a deep link
     try {
-      final initialLink = await getInitialLink();
+      final initialLink = await _appLinks.getInitialLink();
       if (initialLink != null) {
-        _handleDeepLink(initialLink);
+        _handleDeepLink(initialLink.toString());
       }
     } catch (e) {
       debugPrint('Error getting initial link: $e');
     }
 
     // Handle links while app is running
-    _sub = linkStream.listen(
-      (String? link) {
-        if (link != null) {
-          _handleDeepLink(link);
-        }
+    _linkSubscription = _appLinks.uriLinkStream.listen(
+      (Uri uri) {
+        _handleDeepLink(uri.toString());
       },
       onError: (err) {
         debugPrint('Error listening to link stream: $err');
