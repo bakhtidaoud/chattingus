@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import '../core/services/chat_service.dart';
+import '../core/services/toast_service.dart';
 import '../models/chat_model.dart';
 import '../models/message_model.dart';
 
@@ -25,7 +26,7 @@ class ChatController extends GetxController {
       chats.assignAll(fetchedChats);
     } catch (e) {
       debugPrint('Error fetching chats: $e');
-      Get.snackbar('Error', 'Failed to load chats');
+      ToastService.showError('Failed to load chats');
     } finally {
       isLoadingChats.value = false;
     }
@@ -38,7 +39,7 @@ class ChatController extends GetxController {
       messages.assignAll(fetchedMessages);
     } catch (e) {
       debugPrint('Error fetching messages: $e');
-      Get.snackbar('Error', 'Failed to load messages');
+      ToastService.showError('Failed to load messages');
     } finally {
       isLoadingMessages.value = false;
     }
@@ -59,7 +60,7 @@ class ChatController extends GetxController {
       }
     } catch (e) {
       debugPrint('Error sending message: $e');
-      Get.snackbar('Error', 'Failed to send message');
+      ToastService.showError('Failed to send message');
     }
   }
 }

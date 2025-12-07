@@ -1,5 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../network/api_client.dart';
@@ -117,34 +119,39 @@ class NotificationService extends GetxService {
 
   /// Setup notification handlers for all app states
   Future<void> setupNotificationHandlers() async {
-    // Request permissions first
-    final permissionGranted = await requestPermission();
-    if (!permissionGranted) {
-      debugPrint('Notification permission not granted');
-      return;
-    }
+    try {
+      // Request permissions first
+      final permissionGranted = await requestPermission();
+      if (!permissionGranted) {
+        debugPrint('Notification permission not granted');
+        return;
+      }
 
-    // Handle foreground notifications
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      debugPrint('Foreground message received: ${message.messageId}');
-      _handleForegroundNotification(message);
-    });
+      // Handle foreground notifications
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        debugPrint('Foreground message received: ${message.messageId}');
+        _handleForegroundNotification(message);
+      });
 
-    // Handle notification when app is opened from background
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      debugPrint(
-        'App opened from background notification: ${message.messageId}',
-      );
-      _handleNotificationNavigation(message);
-    });
+      // Handle notification when app is opened from background
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        debugPrint(
+          'App opened from background notification: ${message.messageId}',
+        );
+        _handleNotificationNavigation(message);
+      });
 
-    // Check for initial notification if app was opened from terminated state
-    final initialMessage = await _firebaseMessaging.getInitialMessage();
-    if (initialMessage != null) {
-      debugPrint(
-        'App opened from terminated state: ${initialMessage.messageId}',
-      );
-      _handleNotificationNavigation(initialMessage);
+      // Check for initial notification if app was opened from terminated state
+      final initialMessage = await _firebaseMessaging.getInitialMessage();
+      if (initialMessage != null) {
+        debugPrint(
+          'App opened from terminated state: ${initialMessage.messageId}',
+        );
+        _handleNotificationNavigation(initialMessage);
+      }
+    } catch (e) {
+      debugPrint('Error setting up notification handlers (offline?): $e');
+      // Don't throw - allow app to continue without notifications
     }
   }
 
@@ -176,13 +183,17 @@ class NotificationService extends GetxService {
     final data = message.data;
 
     if (notification != null) {
-      // Display in-app notification
-      Get.snackbar(
-        notification.title ?? 'ChattingUs',
-        notification.body ?? '',
-        duration: const Duration(seconds: 4),
-        onTap: (_) => _handleNotificationNavigation(message),
+      // Display in-app notification using Fluttertoast
+      Fluttertoast.showToast(
+        msg:
+            '${notification.title ?? 'ChattingUs'}\n${notification.body ?? ''}',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        backgroundColor: const Color(0xFF2196F3),
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
+      // Note: Fluttertoast doesn't support onTap, navigation handled separately
     }
 
     debugPrint('Notification data: $data');
@@ -270,7 +281,13 @@ class NotificationService extends GetxService {
 
   /// Initialize notification service
   Future<void> initialize() async {
-    await setupNotificationHandlers();
-    listenToTokenRefresh();
+    try {
+      await setupNotificationHandlers();
+      listenToTokenRefresh();
+      debugPrint('NotificationService: Initialized successfully');
+    } catch (e) {
+      debugPrint('NotificationService: Initialization failed (offline?): $e');
+      // Don't throw error - allow app to continue without notifications
+    }
   }
 }

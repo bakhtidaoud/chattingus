@@ -45,5 +45,23 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	
+	<!-- Camera Permission -->
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera to broadcast live streams</string>
+	
+	<!-- Microphone Permission -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your microphone for live streaming audio</string>
+	
+	<!-- Local Network (for WebRTC) -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>We need local network access for peer-to-peer connections during live streaming</string>
+	
+	<!-- Bonjour Services (for WebRTC discovery) -->
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
 </dict>
 </plist>

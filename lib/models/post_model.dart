@@ -6,7 +6,10 @@ part 'post_model.g.dart';
 @JsonSerializable()
 class Post {
   final int id;
+
+  @JsonKey(name: 'user')
   final User author;
+
   final String caption;
   final String? image;
   final String? location;

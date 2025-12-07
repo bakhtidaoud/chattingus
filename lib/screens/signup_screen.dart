@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../l10n/app_localizations.dart';
 import '../controllers/signup_controller.dart';
+import '../core/services/auth_service.dart';
+import 'main_navigation_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -29,20 +31,28 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
-              _SocialButton(
-                icon: Icons.facebook, // Placeholder for Facebook/Google
-                label: l10n.signUpGoogle,
-                color: Colors.blue,
-                textColor: Colors.white,
-                onPressed: () {},
+              Obx(
+                () => _SocialButton(
+                  icon: Icons.g_mobiledata,
+                  label: l10n.signUpGoogle,
+                  color: Colors.red,
+                  textColor: Colors.white,
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : () => _handleGoogleSignUp(context),
+                ),
               ),
               const SizedBox(height: 16),
-              _SocialButton(
-                icon: Icons.g_mobiledata, // Placeholder for GitHub/Microsoft
-                label: l10n.signUpMicrosoft,
-                color: Colors.white,
-                textColor: Colors.black,
-                onPressed: () {},
+              Obx(
+                () => _SocialButton(
+                  icon: Icons.window,
+                  label: l10n.signUpMicrosoft,
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : () => _handleMicrosoftSignUp(context),
+                ),
               ),
               const SizedBox(height: 32),
               Row(
@@ -218,6 +228,74 @@ class SignUpScreen extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _handleGoogleSignUp(BuildContext context) async {
+    final authService = Get.find<AuthService>();
+    final controller = Get.find<SignUpController>();
+
+    try {
+      controller.isLoading.value = true;
+      final userData = await authService.signInWithGoogle();
+      controller.isLoading.value = false;
+
+      Get.offAll(() => const MainNavigationScreen());
+      Get.snackbar(
+        'Success',
+        'Welcome ${userData['email']}!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        icon: const Icon(Icons.check_circle, color: Colors.white),
+      );
+    } catch (e) {
+      controller.isLoading.value = false;
+      if (e.toString().contains('cancelled')) return;
+
+      Get.snackbar(
+        'Error',
+        e.toString().replaceAll('Exception: ', ''),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        icon: const Icon(Icons.error, color: Colors.white),
+        duration: const Duration(seconds: 4),
+      );
+    }
+  }
+
+  Future<void> _handleMicrosoftSignUp(BuildContext context) async {
+    final authService = Get.find<AuthService>();
+    final controller = Get.find<SignUpController>();
+
+    try {
+      controller.isLoading.value = true;
+      final userData = await authService.signInWithMicrosoft();
+      controller.isLoading.value = false;
+
+      Get.offAll(() => const MainNavigationScreen());
+      Get.snackbar(
+        'Success',
+        'Welcome ${userData['email']}!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        icon: const Icon(Icons.check_circle, color: Colors.white),
+      );
+    } catch (e) {
+      controller.isLoading.value = false;
+      if (e.toString().contains('cancelled')) return;
+
+      Get.snackbar(
+        'Error',
+        e.toString().replaceAll('Exception: ', ''),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        icon: const Icon(Icons.error, color: Colors.white),
+        duration: const Duration(seconds: 4),
+      );
+    }
+  }
 }
 
 class _CustomTextField extends StatelessWidget {
@@ -267,7 +345,7 @@ class _SocialButton extends StatelessWidget {
   final String label;
   final Color color;
   final Color textColor;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const _SocialButton({
     required this.icon,

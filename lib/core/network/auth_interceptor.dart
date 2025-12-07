@@ -3,6 +3,8 @@ import 'package:get/get.dart'
     as get_x; // Alias to avoid conflict if needed, though not strictly necessary here
 import 'package:flutter/foundation.dart';
 import '../services/token_storage_service.dart';
+import '../services/error_logging_service.dart';
+import '../services/error_dialog_service.dart';
 import '../constants/api_constants.dart';
 
 class AuthInterceptor extends Interceptor {
@@ -29,14 +31,31 @@ class AuthInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
+    // Log error
+    try {
+      final errorLoggingService = get_x.Get.find<ErrorLoggingService>();
+      errorLoggingService.logError(
+        message: 'API Error: ${err.message}',
+        screen: 'API Client',
+        context: {
+          'url': err.requestOptions.path,
+          'method': err.requestOptions.method,
+          'status_code': err.response?.statusCode,
+        },
+      );
+    } catch (e) {
+      debugPrint('Failed to log API error: $e');
+    }
+
     if (err.response?.statusCode == 401) {
       // If the error is 401, try to refresh the token
       final refreshToken = await _tokenService.getRefreshToken();
 
       if (refreshToken != null) {
         try {
+          debugPrint('🔄 Attempting token refresh...');
+
           // Create a new Dio instance to avoid circular dependency/interceptor loops
-          // or just use a basic request.
           final refreshDio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
 
           final response = await refreshDio.post(
@@ -46,13 +65,11 @@ class AuthInterceptor extends Interceptor {
 
           if (response.statusCode == 200) {
             final newAccessToken = response.data['access'];
-            // If the backend returns a new refresh token, update it too.
-            // Often refresh endpoints only return access token.
-            // Assuming here we might want to keep the old refresh token if not returned.
-            // Adjust based on actual backend response.
             final newRefreshToken = response.data['refresh'] ?? refreshToken;
 
             await _tokenService.saveTokens(newAccessToken, newRefreshToken);
+
+            debugPrint('✅ Token refreshed successfully');
 
             // Retry the original request with the new token
             final opts = err.requestOptions;
@@ -79,6 +96,7 @@ class AuthInterceptor extends Interceptor {
             return handler.resolve(clonedRequest);
           }
         } catch (e) {
+          debugPrint('❌ Token refresh failed: $e');
           // Refresh failed
           await _logout();
         }
@@ -87,14 +105,23 @@ class AuthInterceptor extends Interceptor {
         await _logout();
       }
     }
+
     return handler.next(err);
   }
 
   Future<void> _logout() async {
     await _tokenService.clearTokens();
+
+    // Show auth error dialog
+    try {
+      final errorDialogService = get_x.Get.find<ErrorDialogService>();
+      errorDialogService.showAuthError();
+    } catch (e) {
+      debugPrint('Failed to show auth error dialog: $e');
+    }
+
+    debugPrint('Session expired. Please login again.');
     // Navigate to login screen
     // get_x.Get.offAllNamed('/login'); // Uncomment and adjust route when available
-    // For now, just print or handle as needed
-    debugPrint('Session expired. Please login again.');
   }
 }

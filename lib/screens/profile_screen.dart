@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../l10n/app_localizations.dart';
+import '../controllers/user_profile_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -8,7 +10,8 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
+class _ProfileScreenState extends State<ProfileScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -28,6 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final UserProfileController controller = Get.find<UserProfileController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -55,45 +59,79 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 Row(
                   children: [
                     // Profile Avatar
-                    Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 45,
-                          backgroundColor: Colors.grey.shade300,
-                          child: const Icon(Icons.person, size: 50, color: Colors.white),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: theme.scaffoldBackgroundColor,
-                                width: 2,
+                    Obx(
+                      () => Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 45,
+                            backgroundImage:
+                                controller.currentUser.value?.profilePicture !=
+                                    null
+                                ? NetworkImage(
+                                    controller
+                                        .currentUser
+                                        .value!
+                                        .profilePicture!,
+                                  )
+                                : null,
+                            backgroundColor: Colors.grey.shade300,
+                            child:
+                                controller.currentUser.value?.profilePicture ==
+                                    null
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 50,
+                                    color: Colors.white,
+                                  )
+                                : null,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: theme.scaffoldBackgroundColor,
+                                  width: 2,
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.camera_alt,
+                                size: 16,
+                                color: Colors.white,
                               ),
                             ),
-                            child: const Icon(
-                              Icons.camera_alt,
-                              size: 16,
-                              color: Colors.white,
-                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     const SizedBox(width: 24),
                     // Stats
                     Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _StatColumn(label: l10n.posts, count: '1.2k'),
-                          _StatColumn(label: l10n.followers, count: '15.5k'),
-                          _StatColumn(label: l10n.following, count: '450'),
-                        ],
+                      child: Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _StatColumn(
+                              label: l10n.posts,
+                              count:
+                                  '${controller.currentUser.value?.postsCount ?? 0}',
+                            ),
+                            _StatColumn(
+                              label: l10n.followers,
+                              count:
+                                  '${controller.currentUser.value?.followersCount ?? 0}',
+                            ),
+                            _StatColumn(
+                              label: l10n.following,
+                              count:
+                                  '${controller.currentUser.value?.followingCount ?? 0}',
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -102,30 +140,36 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 // Name and Bio
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Jane Doe',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                  child: Obx(
+                    () => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          controller.displayName,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        '@janedoe_ux',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 14,
+                        const SizedBox(height: 2),
+                        Text(
+                          '@${controller.currentUser.value?.username ?? ''}',
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 14,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'UX Designer | Sharing my design journey ✨ | Coffee enthusiast ☕',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ],
+                        if (controller.currentUser.value?.bio != null &&
+                            controller.currentUser.value!.bio!.isNotEmpty)
+                          const SizedBox(height: 8),
+                        if (controller.currentUser.value?.bio != null &&
+                            controller.currentUser.value!.bio!.isNotEmpty)
+                          Text(
+                            controller.currentUser.value!.bio!,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -136,7 +180,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(
-                        color: isDark ? Colors.grey.shade700 : Colors.grey.shade300,
+                        color: isDark
+                            ? Colors.grey.shade700
+                            : Colors.grey.shade300,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -171,10 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               labelColor: theme.textTheme.bodyLarge?.color,
               unselectedLabelColor: Colors.grey,
               tabs: [
-                Tab(
-                  icon: const Icon(Icons.grid_on_outlined),
-                  text: l10n.posts,
-                ),
+                Tab(icon: const Icon(Icons.grid_on_outlined), text: l10n.posts),
                 Tab(
                   icon: const Icon(Icons.video_library_outlined),
                   text: l10n.reels,
@@ -233,18 +276,10 @@ class _StatColumn extends StatelessWidget {
       children: [
         Text(
           count,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 13,
-          ),
-        ),
+        Text(label, style: const TextStyle(fontSize: 13)),
       ],
     );
   }
@@ -254,7 +289,7 @@ class _PostsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     // Sample post data
     final posts = List.generate(9, (index) => index);
 
@@ -320,18 +355,11 @@ class _EmptyTabView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 80,
-            color: Colors.grey.shade400,
-          ),
+          Icon(icon, size: 80, color: Colors.grey.shade400),
           const SizedBox(height: 16),
           Text(
             message,
-            style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
           ),
         ],
       ),

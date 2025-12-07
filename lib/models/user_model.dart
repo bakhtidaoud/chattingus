@@ -6,7 +6,9 @@ part 'user_model.g.dart';
 class User {
   final int id;
   final String username;
-  final String email;
+  
+  // Email is not in the API response, make it optional
+  final String? email;
 
   @JsonKey(name: 'first_name')
   final String? firstName;
@@ -34,7 +36,7 @@ class User {
   User({
     required this.id,
     required this.username,
-    required this.email,
+    this.email,
     this.firstName,
     this.lastName,
     this.phoneNumber,

@@ -22,20 +22,37 @@ import 'core/services/notification_service.dart'
     show NotificationService, firebaseMessagingBackgroundHandler;
 import 'core/services/search_service.dart';
 import 'core/services/permission_service.dart';
+import 'core/services/live_service.dart';
+import 'core/services/error_logging_service.dart';
+import 'core/services/error_dialog_service.dart';
+import 'core/services/network_connectivity_service.dart';
+import 'core/services/global_error_handler.dart';
 
 // Import controllers
 import 'controllers/user_profile_controller.dart';
 import 'controllers/feed_controller.dart';
 import 'controllers/chat_controller.dart';
+import 'controllers/live_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Initialize Firebase with error handling for offline mode
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
-  // Set up background message handler
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    // Set up background message handler only if Firebase initialized successfully
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+    debugPrint('✅ Firebase initialized successfully');
+  } catch (e) {
+    debugPrint(
+      '⚠️ Firebase initialization failed (app will work without push notifications): $e',
+    );
+    // Continue app initialization even if Firebase fails
+  }
 
   // Initialize services
   await Get.putAsync(() async => TokenStorageService());
@@ -45,22 +62,43 @@ Future<void> main() async {
   Get.put(PostService());
   Get.put(ChatService());
 
-  // Initialize NotificationService
+  // Initialize NotificationService with error handling
   final notificationService = Get.put(NotificationService());
-  await notificationService.initialize();
+  try {
+    await notificationService.initialize();
+    debugPrint('✅ Notification service initialized successfully');
+  } catch (e) {
+    debugPrint(
+      '⚠️ Notification service initialization failed (offline mode): $e',
+    );
+    // Continue app initialization even if notifications fail
+  }
 
   // Initialize SearchService
   Get.put(SearchService());
 
+  // Initialize LiveService
+  Get.put(LiveService());
+
   // Initialize PermissionService
   Get.put(PermissionService());
+
+  // Initialize error handling services
+  Get.put(ErrorLoggingService());
+  Get.put(ErrorDialogService());
+  Get.put(NetworkConnectivityService());
+
+  // Setup global error handler
+  GlobalErrorHandler.initialize();
 
   // Initialize controllers
   Get.put(SettingsController());
   Get.put(UserProfileController());
   Get.put(FeedController());
   Get.put(ChatController());
+  Get.put(LiveController());
 
+  debugPrint('✅ App initialization complete - launching app');
   runApp(const MyApp());
 }
 

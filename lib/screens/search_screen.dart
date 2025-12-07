@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/search_controller.dart' as app;
+import '../core/services/toast_service.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/search_widgets.dart';
 
@@ -362,21 +363,21 @@ class SearchScreen extends StatelessWidget {
   // Navigation methods
   void _navigateToUserProfile(int userId) {
     // TODO: Implement navigation to user profile
-    Get.snackbar('Navigate', 'To user profile: $userId');
+    ToastService.showInfo('Navigate to user profile: $userId');
   }
 
   void _navigateToPost(int postId) {
     // TODO: Implement navigation to post detail
-    Get.snackbar('Navigate', 'To post: $postId');
+    ToastService.showInfo('Navigate to post: $postId');
   }
 
   void _navigateToReel(int reelId) {
     // TODO: Implement navigation to reel player
-    Get.snackbar('Navigate', 'To reel: $reelId');
+    ToastService.showInfo('Navigate to reel: $reelId');
   }
 
   void _navigateToHashtag(String hashtag) {
     // TODO: Implement navigation to hashtag page
-    Get.snackbar('Navigate', 'To hashtag: #$hashtag');
+    ToastService.showInfo('Navigate to hashtag: #$hashtag');
   }
 }

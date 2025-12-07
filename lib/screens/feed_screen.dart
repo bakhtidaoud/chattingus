@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../l10n/app_localizations.dart';
+import '../controllers/feed_controller.dart';
 import 'story_viewer_screen.dart';
 import 'add_story_screen.dart';
+import 'image_viewer_screen.dart';
+import 'comments_screen.dart';
+import 'user_profile_view_screen.dart';
 
 class FeedScreen extends StatelessWidget {
   const FeedScreen({super.key});
@@ -10,119 +15,167 @@ class FeedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final FeedController controller = Get.find<FeedController>();
 
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            // Top Bar
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
+        child: RefreshIndicator(
+          onRefresh: controller.refreshFeed,
+          child: CustomScrollView(
+            slivers: [
+              // Top Bar
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        l10n.feed,
+                        style: theme.textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.add_circle_outline),
+                            onPressed: () {},
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.favorite_border),
+                            onPressed: () {},
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.send_outlined),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      l10n.feed,
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+              ),
+
+              // Stories Section
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 110,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    children: [
+                      _StoryItem(name: l10n.yourStory, isUser: true),
+                      const _StoryItem(
+                        name: 'Clara',
+                        imageUrl: 'https://i.pravatar.cc/150?u=clara',
+                      ),
+                      const _StoryItem(
+                        name: 'Marcus',
+                        imageUrl: 'https://i.pravatar.cc/150?u=marcus',
+                      ),
+                      const _StoryItem(
+                        name: 'David',
+                        imageUrl: 'https://i.pravatar.cc/150?u=david',
+                      ),
+                      const _StoryItem(
+                        name: 'Sophia',
+                        imageUrl: 'https://i.pravatar.cc/150?u=sophia',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SliverToBoxAdapter(child: Divider(height: 1)),
+
+              // Posts Feed - Using real data from API
+              Obx(() {
+                if (controller.isLoading.value && controller.posts.isEmpty) {
+                  return const SliverFillRemaining(
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+
+                if (controller.errorMessage.value.isNotEmpty &&
+                    controller.posts.isEmpty) {
+                  return SliverFillRemaining(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            size: 64,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            controller.errorMessage.value,
+                            style: const TextStyle(color: Colors.grey),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: controller.loadFeed,
+                            child: const Text('Retry'),
+                          ),
+                        ],
                       ),
                     ),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.add_circle_outline),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.favorite_border),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.send_outlined),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                  );
+                }
 
-            // Stories Section
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 110,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  children: [
-                    _StoryItem(name: l10n.yourStory, isUser: true),
-                    const _StoryItem(
-                      name: 'Clara',
-                      imageUrl: 'https://i.pravatar.cc/150?u=clara',
+                if (controller.posts.isEmpty) {
+                  return SliverFillRemaining(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.photo_library_outlined,
+                            size: 64,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No posts yet',
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              color: Colors.grey,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Follow users to see their posts',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
                     ),
-                    const _StoryItem(
-                      name: 'Marcus',
-                      imageUrl: 'https://i.pravatar.cc/150?u=marcus',
-                    ),
-                    const _StoryItem(
-                      name: 'David',
-                      imageUrl: 'https://i.pravatar.cc/150?u=david',
-                    ),
-                    const _StoryItem(
-                      name: 'Sophia',
-                      imageUrl: 'https://i.pravatar.cc/150?u=sophia',
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                  );
+                }
 
-            const SliverToBoxAdapter(child: Divider(height: 1)),
-
-            // Posts Feed
-            SliverList(
-              delegate: SliverChildListDelegate([
-                _PostItem(
-                  userName: 'John Doe',
-                  userLocation: 'San Francisco, CA',
-                  userImageUrl: 'https://i.pravatar.cc/150?u=johndoe',
-                  postImageUrl:
-                      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800',
-                  likes: '1,234',
-                  caption: l10n.workingOnProject,
-                  commentCount: 56,
-                ),
-                _PostItem(
-                  userName: 'Sarah Miller',
-                  userLocation: 'New York, NY',
-                  userImageUrl: 'https://i.pravatar.cc/150?u=sarahmiller',
-                  postImageUrl:
-                      'https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800',
-                  likes: '892',
-                  caption: 'Beautiful sunset at the beach 🌅',
-                  commentCount: 23,
-                ),
-                _PostItem(
-                  userName: 'Alex Chen',
-                  userLocation: 'Los Angeles, CA',
-                  userImageUrl: 'https://i.pravatar.cc/150?u=alexchen',
-                  postImageUrl:
-                      'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800',
-                  likes: '2,145',
-                  caption: 'Code never lies, comments sometimes do 💻',
-                  commentCount: 89,
-                ),
-              ]),
-            ),
-          ],
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final post = controller.posts[index];
+                    return _PostItem(
+                      post: post,
+                      onLike: () => controller.likePost(post.id),
+                      onComment: () {
+                        // TODO: Navigate to comments screen
+                      },
+                    );
+                  }, childCount: controller.posts.length),
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );
@@ -193,7 +246,7 @@ class _StoryItem extends StatelessWidget {
                         color: Theme.of(context).scaffoldBackgroundColor,
                       ),
                       child: CircleAvatar(
-                        radius: 32,
+                        radius: 28,
                         backgroundImage: imageUrl != null
                             ? NetworkImage(imageUrl!)
                             : null,
@@ -201,7 +254,7 @@ class _StoryItem extends StatelessWidget {
                         child: imageUrl == null && isUser
                             ? const Icon(
                                 Icons.person,
-                                size: 32,
+                                size: 28,
                                 color: Colors.white,
                               )
                             : null,
@@ -247,28 +300,27 @@ class _StoryItem extends StatelessWidget {
 }
 
 class _PostItem extends StatelessWidget {
-  final String userName;
-  final String userLocation;
-  final String userImageUrl;
-  final String postImageUrl;
-  final String likes;
-  final String caption;
-  final int commentCount;
+  final dynamic post; // Can be Post model or keep flexible for now
+  final VoidCallback? onLike;
+  final VoidCallback? onComment;
 
-  const _PostItem({
-    required this.userName,
-    required this.userLocation,
-    required this.userImageUrl,
-    required this.postImageUrl,
-    required this.likes,
-    required this.caption,
-    required this.commentCount,
-  });
+  const _PostItem({required this.post, this.onLike, this.onComment});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+
+    // Extract data from post (works with Post model)
+    final userName =
+        post.author?.username ?? post.author?.firstName ?? 'Unknown';
+    final userLocation = post.location ?? '';
+    final userImageUrl = post.author?.profilePicture ?? '';
+    final postImageUrl = post.image ?? '';
+    final likesCount = post.likesCount ?? 0;
+    final caption = post.caption ?? '';
+    final commentCount = post.commentsCount ?? 0;
+    final isLiked = post.isLiked ?? false;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,7 +332,13 @@ class _PostItem extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundImage: NetworkImage(userImageUrl),
+                backgroundImage: userImageUrl.isNotEmpty
+                    ? NetworkImage(userImageUrl)
+                    : null,
+                backgroundColor: Colors.grey.shade300,
+                child: userImageUrl.isEmpty
+                    ? const Icon(Icons.person, color: Colors.white)
+                    : null,
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -294,13 +352,14 @@ class _PostItem extends StatelessWidget {
                         fontSize: 14,
                       ),
                     ),
-                    Text(
-                      userLocation,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
+                    if (userLocation.isNotEmpty)
+                      Text(
+                        userLocation,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -310,20 +369,21 @@ class _PostItem extends StatelessWidget {
         ),
 
         // Post Image
-        Image.network(
-          postImageUrl,
-          width: double.infinity,
-          height: 400,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              width: double.infinity,
-              height: 400,
-              color: Colors.grey.shade300,
-              child: const Icon(Icons.image, size: 100, color: Colors.grey),
-            );
-          },
-        ),
+        if (postImageUrl.isNotEmpty)
+          Image.network(
+            postImageUrl,
+            width: double.infinity,
+            height: 400,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                width: double.infinity,
+                height: 400,
+                color: Colors.grey.shade300,
+                child: const Icon(Icons.image, size: 100, color: Colors.grey),
+              );
+            },
+          ),
 
         // Action Buttons
         Padding(
@@ -331,12 +391,15 @@ class _PostItem extends StatelessWidget {
           child: Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.favorite_border),
-                onPressed: () {},
+                icon: Icon(
+                  isLiked ? Icons.favorite : Icons.favorite_border,
+                  color: isLiked ? Colors.red : null,
+                ),
+                onPressed: onLike,
               ),
               IconButton(
                 icon: const Icon(Icons.chat_bubble_outline),
-                onPressed: () {},
+                onPressed: onComment,
               ),
               IconButton(
                 icon: const Icon(Icons.send_outlined),
@@ -355,39 +418,47 @@ class _PostItem extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            '$likes ${l10n.likes.toLowerCase()}',
+            '$likesCount ${l10n.likes.toLowerCase()}',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
 
         // Caption
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-          child: RichText(
-            text: TextSpan(
-              style: theme.textTheme.bodyMedium,
-              children: [
-                TextSpan(
-                  text: '$userName ',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextSpan(text: caption),
-              ],
+        if (caption.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 4.0,
+            ),
+            child: RichText(
+              text: TextSpan(
+                style: theme.textTheme.bodyMedium,
+                children: [
+                  TextSpan(
+                    text: '$userName ',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: caption),
+                ],
+              ),
             ),
           ),
-        ),
 
         // View Comments
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-          child: GestureDetector(
-            onTap: () {},
-            child: Text(
-              l10n.viewAllComments(commentCount),
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+        if (commentCount > 0)
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 4.0,
+            ),
+            child: GestureDetector(
+              onTap: onComment,
+              child: Text(
+                l10n.viewAllComments(commentCount),
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+              ),
             ),
           ),
-        ),
 
         const SizedBox(height: 16),
       ],

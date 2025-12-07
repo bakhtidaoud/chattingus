@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../l10n/app_localizations.dart';
 import '../controllers/login_controller.dart';
+import '../core/services/auth_service.dart';
 import 'signup_screen.dart';
+import 'main_navigation_screen.dart';
 
 import 'forgot_password_screen.dart';
 
@@ -103,6 +105,25 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
+              // Keep Me Logged In Checkbox
+              Obx(
+                () => Row(
+                  children: [
+                    Checkbox(
+                      value: controller.keepMeLoggedIn.value,
+                      onChanged: (value) {
+                        controller.keepMeLoggedIn.value = value ?? false;
+                      },
+                    ),
+                    const Text(
+                      'Keep me logged in',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
+              // Forgot Password
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -165,16 +186,24 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 32),
-              _SocialButton(
-                icon: Icons.g_mobiledata, // Placeholder for Google
-                label: l10n.continueWithGoogle,
-                onPressed: () {},
+              Obx(
+                () => _SocialButton(
+                  icon: Icons.g_mobiledata,
+                  label: l10n.continueWithGoogle,
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : () => _handleGoogleSignIn(context),
+                ),
               ),
               const SizedBox(height: 16),
-              _SocialButton(
-                icon: Icons.window, // Placeholder for Microsoft
-                label: l10n.continueWithMicrosoft,
-                onPressed: () {},
+              Obx(
+                () => _SocialButton(
+                  icon: Icons.window,
+                  label: l10n.continueWithMicrosoft,
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : () => _handleMicrosoftSignIn(context),
+                ),
               ),
               const SizedBox(height: 40),
               Row(
@@ -198,12 +227,80 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _handleGoogleSignIn(BuildContext context) async {
+    final authService = Get.find<AuthService>();
+    final controller = Get.find<LoginController>();
+
+    try {
+      controller.isLoading.value = true;
+      final userData = await authService.signInWithGoogle();
+      controller.isLoading.value = false;
+
+      Get.offAll(() => const MainNavigationScreen());
+      Get.snackbar(
+        'Success',
+        'Welcome ${userData['email']}!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        icon: const Icon(Icons.check_circle, color: Colors.white),
+      );
+    } catch (e) {
+      controller.isLoading.value = false;
+      if (e.toString().contains('cancelled')) return;
+
+      Get.snackbar(
+        'Error',
+        e.toString().replaceAll('Exception: ', ''),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        icon: const Icon(Icons.error, color: Colors.white),
+        duration: const Duration(seconds: 4),
+      );
+    }
+  }
+
+  Future<void> _handleMicrosoftSignIn(BuildContext context) async {
+    final authService = Get.find<AuthService>();
+    final controller = Get.find<LoginController>();
+
+    try {
+      controller.isLoading.value = true;
+      final userData = await authService.signInWithMicrosoft();
+      controller.isLoading.value = false;
+
+      Get.offAll(() => const MainNavigationScreen());
+      Get.snackbar(
+        'Success',
+        'Welcome ${userData['email']}!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        icon: const Icon(Icons.check_circle, color: Colors.white),
+      );
+    } catch (e) {
+      controller.isLoading.value = false;
+      if (e.toString().contains('cancelled')) return;
+
+      Get.snackbar(
+        'Error',
+        e.toString().replaceAll('Exception: ', ''),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        icon: const Icon(Icons.error, color: Colors.white),
+        duration: const Duration(seconds: 4),
+      );
+    }
+  }
 }
 
 class _SocialButton extends StatelessWidget {
   final IconData icon;
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const _SocialButton({
     required this.icon,

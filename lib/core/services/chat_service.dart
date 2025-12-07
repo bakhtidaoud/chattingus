@@ -9,8 +9,18 @@ class ChatService extends GetxService {
   Future<List<Chat>> fetchChats() async {
     final response = await _apiClient.get('/chat/chats/');
     if (response.statusCode == 200) {
-      final List<dynamic> data = response.data;
-      return data.map((json) => Chat.fromJson(json)).toList();
+      // Handle paginated response
+      if (response.data is Map && response.data.containsKey('results')) {
+        final List<dynamic> data = response.data['results'];
+        return data.map((json) => Chat.fromJson(json)).toList();
+      }
+      // Handle direct list response
+      else if (response.data is List) {
+        final List<dynamic> data = response.data;
+        return data.map((json) => Chat.fromJson(json)).toList();
+      } else {
+        throw Exception('Unexpected response format');
+      }
     } else {
       throw Exception('Failed to load chats');
     }
@@ -22,8 +32,18 @@ class ChatService extends GetxService {
       queryParameters: {'chat_id': chatId},
     );
     if (response.statusCode == 200) {
-      final List<dynamic> data = response.data;
-      return data.map((json) => Message.fromJson(json)).toList();
+      // Handle paginated response
+      if (response.data is Map && response.data.containsKey('results')) {
+        final List<dynamic> data = response.data['results'];
+        return data.map((json) => Message.fromJson(json)).toList();
+      }
+      // Handle direct list response
+      else if (response.data is List) {
+        final List<dynamic> data = response.data;
+        return data.map((json) => Message.fromJson(json)).toList();
+      } else {
+        throw Exception('Unexpected response format');
+      }
     } else {
       throw Exception('Failed to load messages');
     }
@@ -32,10 +52,7 @@ class ChatService extends GetxService {
   Future<Message> sendMessage(int chatId, String content) async {
     final response = await _apiClient.post(
       '/chat/messages/',
-      data: {
-        'chat': chatId, // Assuming backend expects 'chat' ID
-        'content': content,
-      },
+      data: {'chat': chatId, 'content': content},
     );
     if (response.statusCode == 201 || response.statusCode == 200) {
       return Message.fromJson(response.data);

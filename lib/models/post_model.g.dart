@@ -8,7 +8,7 @@ part of 'post_model.dart';
 
 Post _$PostFromJson(Map<String, dynamic> json) => Post(
   id: (json['id'] as num).toInt(),
-  author: User.fromJson(json['author'] as Map<String, dynamic>),
+  author: User.fromJson(json['user'] as Map<String, dynamic>),
   caption: json['caption'] as String,
   image: json['image'] as String?,
   location: json['location'] as String?,
@@ -20,7 +20,7 @@ Post _$PostFromJson(Map<String, dynamic> json) => Post(
 
 Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
   'id': instance.id,
-  'author': instance.author,
+  'user': instance.author,
   'caption': instance.caption,
   'image': instance.image,
   'location': instance.location,

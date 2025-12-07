@@ -36,8 +36,18 @@ class UserService extends GetxService {
       queryParameters: {'q': query},
     );
     if (response.statusCode == 200) {
-      final List<dynamic> data = response.data;
-      return data.map((json) => User.fromJson(json)).toList();
+      // Handle paginated response (Django REST Framework pagination)
+      if (response.data is Map && response.data.containsKey('results')) {
+        final List<dynamic> data = response.data['results'];
+        return data.map((json) => User.fromJson(json)).toList();
+      }
+      // Handle direct list response
+      else if (response.data is List) {
+        final List<dynamic> data = response.data;
+        return data.map((json) => User.fromJson(json)).toList();
+      } else {
+        throw Exception('Unexpected response format');
+      }
     } else {
       throw Exception('Failed to search users');
     }

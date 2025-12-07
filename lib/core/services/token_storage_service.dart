@@ -38,4 +38,11 @@ class TokenStorageService extends GetxService {
   Future<void> clearFCMToken() async {
     await _storage.delete(key: _fcmTokenKey);
   }
+
+  // User ID methods (for error logging)
+  Future<String?> getUserId() async {
+    // TODO: Store user ID during login and retrieve it here
+    // For now, return null
+    return null;
+  }
 }
