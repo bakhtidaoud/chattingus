@@ -1,52 +1,33 @@
 import 'package:dio/dio.dart';
 import '../../../../core/api/dio_client.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService {
   final Dio _dio = DioClient().dio;
+  final _storage = const FlutterSecureStorage();
 
-  Future<Response> login(String email, String password) async {
-    return await _dio.post(
+  Future<Response> login(String username, String password) async {
+    final response = await _dio.post(
       '/login/',
-      data: {'email': email, 'password': password},
+      data: {'username': username, 'password': password},
     );
+
+    if (response.statusCode == 200) {
+      await _storage.write(key: 'access_token', value: response.data['access']);
+      await _storage.write(
+        key: 'refresh_token',
+        value: response.data['refresh'],
+      );
+    }
+    return response;
   }
 
-  Future<Response> register({
-    required String username,
-    required String email,
-    required String password,
-    String? referralCode,
-  }) async {
-    return await _dio.post(
-      '/register/',
-      data: {
-        'username': username,
-        'email': email,
-        'password': password,
-        if (referralCode != null) 'referral_code': referralCode,
-      },
-    );
+  Future<Response> getCurrentUser() async {
+    return await _dio.get('/users/me/');
   }
 
-  Future<Response> verify2FA(String code) async {
-    return await _dio.post('/2fa/verify/', data: {'code': code});
-  }
-
-  Future<Response> verifyEmail(String code) async {
-    return await _dio.post('/verify-email/', data: {'code': code});
-  }
-
-  Future<Response> requestPasswordReset(String email) async {
-    return await _dio.post('/password/reset/', data: {'email': email});
-  }
-
-  Future<Response> changePassword(
-    String currentPassword,
-    String newPassword,
-  ) async {
-    return await _dio.post(
-      '/password/change/',
-      data: {'current_password': currentPassword, 'new_password': newPassword},
-    );
+  Future<void> logout() async {
+    await _storage.delete(key: 'access_token');
+    await _storage.delete(key: 'refresh_token');
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
 import '../../data/models/chat_models.dart';
 import '../../data/services/chat_service.dart';
 import '../../data/services/chat_socket_service.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 
 final chatServiceProvider = Provider((ref) => ChatService());
 final chatSocketProvider = Provider((ref) => ChatSocketService());
@@ -12,33 +14,35 @@ final conversationsProvider = FutureProvider<List<Conversation>>((ref) async {
   return (response.data as List).map((c) => Conversation.fromJson(c)).toList();
 });
 
-class ChatNotifier extends StateNotifier<AsyncValue<List<Message>>> {
-  final ChatService service;
-  final ChatSocketService socketService;
-  final String conversationId;
+class ChatNotifier extends FamilyAsyncNotifier<List<Message>, String> {
+  late final ChatService service;
+  late final ChatSocketService socketService;
+  late final String conversationId;
+  late final String currentUserId;
 
-  ChatNotifier({
-    required this.service,
-    required this.socketService,
-    required this.conversationId,
-  }) : super(const AsyncValue.loading()) {
-    _init();
+  @override
+  FutureOr<List<Message>> build(String arg) async {
+    conversationId = arg;
+    service = ref.read(chatServiceProvider);
+    socketService = ref.read(chatSocketProvider);
+    final user = ref.read(currentUserProvider).value;
+    currentUserId = user?.id ?? "0";
+
+    return _fetchMessages();
   }
 
-  Future<void> _init() async {
-    try {
-      final response = await service.getMessages(conversationId);
-      final List<Message> messages = (response.data['results'] as List)
-          .map((m) => Message.fromJson(m, "CURRENT_USER_ID"))
-          .toList();
-      state = AsyncValue.data(messages);
+  Future<List<Message>> _fetchMessages() async {
+    final response = await service.getMessages(conversationId);
+    final List<Message> messages = (response.data['results'] as List)
+        .map((m) => Message.fromJson(m, currentUserId))
+        .toList();
 
-      socketService.connect(conversationId, "TOKEN").listen((msg) {
-        // Update logic
-      });
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
+    // In a real app, you'd get the actual websocket token
+    socketService.connect(conversationId, "WS_TOKEN").listen((msg) {
+      // Handle incoming socket messages
+    });
+
+    return messages;
   }
 
   Future<void> send(String content) async {
@@ -47,14 +51,6 @@ class ChatNotifier extends StateNotifier<AsyncValue<List<Message>>> {
 }
 
 final currentChatProvider =
-    StateNotifierProvider.family<
-      ChatNotifier,
-      AsyncValue<List<Message>>,
-      String
-    >((ref, id) {
-      return ChatNotifier(
-        service: ref.watch(chatServiceProvider),
-        socketService: ref.watch(chatSocketProvider),
-        conversationId: id,
-      );
+    AsyncNotifierProvider.family<ChatNotifier, List<Message>, String>(() {
+      return ChatNotifier();
     });

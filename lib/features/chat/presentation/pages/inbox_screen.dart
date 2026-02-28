@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../providers/chat_provider.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -13,31 +14,32 @@ class InboxScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final conversationsAsync = ref.watch(conversationsProvider);
+    final userAsync = ref.watch(currentUserProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Inbox'),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.edit_note_rounded),
-          ),
-        ],
       ),
       body: conversationsAsync.when(
-        data: (conversations) => RefreshIndicator(
-          onRefresh: () => ref.refresh(conversationsProvider.future),
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            itemCount: conversations.length,
-            itemBuilder: (context, index) {
-              final conversation = conversations[index];
-              return _ConversationTile(conversation: conversation);
-            },
-          ),
-        ),
+        data: (conversations) {
+          final currentUserId = userAsync.value?.id ?? "0";
+          return RefreshIndicator(
+            onRefresh: () => ref.refresh(conversationsProvider.future),
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              itemCount: conversations.length,
+              itemBuilder: (context, index) {
+                final conversation = conversations[index];
+                return _ConversationTile(
+                  conversation: conversation,
+                  currentUserId: currentUserId,
+                );
+              },
+            ),
+          );
+        },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(child: Text('Error: $e')),
       ),
@@ -47,13 +49,15 @@ class InboxScreen extends ConsumerWidget {
 
 class _ConversationTile extends StatelessWidget {
   final dynamic conversation;
+  final String currentUserId;
 
-  const _ConversationTile({required this.conversation});
+  const _ConversationTile({
+    required this.conversation,
+    required this.currentUserId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    const currentUserId = "CURRENT_USER_ID"; // Temporary
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: GlassCard(
@@ -109,12 +113,9 @@ class _ConversationTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                '12:30 PM', // Placeholder for actual time formatting
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white.withOpacity(0.4),
-                ),
+              const Text(
+                'Just now',
+                style: TextStyle(fontSize: 12, color: Colors.white24),
               ),
               if (conversation.unreadCount > 0) ...[
                 const SizedBox(height: 6),

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../data/models/dashboard_models.dart';
-import '../data/services/dashboard_service.dart';
+import '../../data/models/dashboard_models.dart';
+import '../../data/services/dashboard_service.dart';
 
 final dashboardServiceProvider = Provider((ref) => DashboardService());
 

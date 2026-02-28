@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../data/models/notification_model.dart';
-import '../data/services/notification_service.dart';
+import 'dart:async';
+import '../../data/models/notification_model.dart';
+import '../../data/services/notification_service.dart';
 
 final notificationServiceProvider = Provider((ref) => NotificationService());
 
@@ -14,18 +15,18 @@ final notificationsProvider = FutureProvider<List<AppNotification>>((
       .toList();
 });
 
-class NotificationNotifier extends StateNotifier<AsyncValue<void>> {
-  final NotificationService _service;
-  final Ref _ref;
-
-  NotificationNotifier(this._service, this._ref)
-    : super(const AsyncValue.data(null));
+class NotificationNotifier extends AsyncNotifier<void> {
+  @override
+  FutureOr<void> build() {
+    return null;
+  }
 
   Future<void> markAllAsRead() async {
     state = const AsyncValue.loading();
     try {
-      await _service.markAllAsRead();
-      _ref.invalidate(notificationsProvider);
+      final service = ref.read(notificationServiceProvider);
+      await service.markAllAsRead();
+      ref.invalidate(notificationsProvider);
       state = const AsyncValue.data(null);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
@@ -34,6 +35,4 @@ class NotificationNotifier extends StateNotifier<AsyncValue<void>> {
 }
 
 final notificationActionProvider =
-    StateNotifierProvider<NotificationNotifier, AsyncValue<void>>((ref) {
-      return NotificationNotifier(ref.watch(notificationServiceProvider), ref);
-    });
+    AsyncNotifierProvider<NotificationNotifier, void>(NotificationNotifier.new);
