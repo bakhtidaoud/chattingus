@@ -1,0 +1,1 @@
+ C:\\projects\\flutter\\chattingus\\.dart_tool\\flutter_build\\0028db1aca25d1cbb5c66329a53faea9\\native_assets.json: 
