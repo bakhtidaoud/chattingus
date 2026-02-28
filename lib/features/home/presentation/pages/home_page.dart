@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_card.dart';
+import '../../../stories/presentation/widgets/story_tray.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,88 +18,117 @@ class HomePage extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () => context.push('/feed'),
+            onPressed: () => context.push('/notifications'),
             icon: const Icon(
-              Icons.public_rounded,
+              Icons.notifications_outlined,
               color: AppTheme.primaryIndigo,
             ),
           ),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded)),
+          IconButton(
+            onPressed: () => context.push('/wallet'),
+            icon: const Icon(
+              Icons.account_balance_wallet_outlined,
+              color: AppTheme.primaryIndigo,
+            ),
+          ),
+          IconButton(
+            onPressed: () => context.push('/search'),
+            icon: const Icon(
+              Icons.search_rounded,
+              color: AppTheme.primaryIndigo,
+            ),
+          ),
           const SizedBox(width: 8),
-          const CircleAvatar(
-            radius: 18,
-            backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=user1'),
+          GestureDetector(
+            onTap: () => context.push('/dashboard'),
+            child: const CircleAvatar(
+              radius: 18,
+              backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=me'),
+            ),
           ),
           const SizedBox(width: 16),
         ],
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child:
-                GlassCard(
-                      padding: const EdgeInsets.all(12),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          radius: 25,
-                          backgroundImage: NetworkImage(
-                            'https://i.pravatar.cc/150?u=chat$index',
-                          ),
-                        ),
-                        title: Text(
-                          'User $index',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          'Last message preview goes here...',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
-                          ),
-                        ),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              '12:45 PM',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white.withOpacity(0.4),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const StoryTray(),
+            const Divider(color: Colors.white10, height: 1),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16),
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child:
+                      GlassCard(
+                            padding: const EdgeInsets.all(12),
+                            child: ListTile(
+                              onTap: () => context.push('/inbox'),
+                              leading: CircleAvatar(
+                                radius: 25,
+                                backgroundImage: NetworkImage(
+                                  'https://i.pravatar.cc/150?u=chat$index',
+                                ),
+                              ),
+                              title: Text(
+                                'User $index',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                'Last message preview goes here...',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.6),
+                                ),
+                              ),
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '12:45 PM',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white.withOpacity(0.4),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  if (index < 3)
+                                    Container(
+                                      padding: const EdgeInsets.all(6),
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppTheme.primaryIndigo,
+                                      ),
+                                      child: const Text(
+                                        '2',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            if (index < 3)
-                              Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppTheme.primaryIndigo,
-                                ),
-                                child: const Text(
-                                  '2',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    )
-                    .animate()
-                    .fadeIn(delay: (index * 50).ms)
-                    .slideY(begin: 0.1, end: 0),
-          );
-        },
+                          )
+                          .animate()
+                          .fadeIn(delay: (index * 50).ms)
+                          .slideY(begin: 0.1, end: 0),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => context.push('/inbox'),
         backgroundColor: AppTheme.primaryIndigo,
         child: const Icon(Icons.message_rounded, color: Colors.white),
       ).animate().scale(delay: 500.ms),

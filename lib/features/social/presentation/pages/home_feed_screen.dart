@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_card.dart';
@@ -21,6 +22,10 @@ class HomeFeedScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.storefront_outlined),
+            onPressed: () => context.push('/marketplace'),
+          ),
           IconButton(
             icon: const Icon(Icons.explore_outlined),
             onPressed: () => context.push('/explore'),
