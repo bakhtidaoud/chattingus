@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import '../../../../core/api/dio_client.dart';
-import '../../../../core/theme/app_theme.dart';
 
 class AuthService {
   final Dio _dio = DioClient().dio;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_card.dart';
 
@@ -15,6 +16,13 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          IconButton(
+            onPressed: () => context.push('/feed'),
+            icon: const Icon(
+              Icons.public_rounded,
+              color: AppTheme.primaryIndigo,
+            ),
+          ),
           IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded)),
           const SizedBox(width: 8),
           const CircleAvatar(

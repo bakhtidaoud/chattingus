@@ -6,6 +6,9 @@ import '../../features/auth/presentation/pages/register_screen.dart';
 import '../../features/auth/presentation/pages/otp_screen.dart';
 import '../../features/auth/presentation/pages/password_reset_screen.dart';
 import '../../features/auth/presentation/pages/splash_screen.dart';
+import '../../features/social/presentation/pages/home_feed_screen.dart';
+import '../../features/social/presentation/pages/create_post_screen.dart';
+import '../../features/social/presentation/pages/hashtag_explore_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -22,6 +25,15 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const PasswordResetScreen(),
     ),
     GoRoute(path: '/', builder: (context, state) => const HomePage()),
+    GoRoute(path: '/feed', builder: (context, state) => const HomeFeedScreen()),
+    GoRoute(
+      path: '/create-post',
+      builder: (context, state) => const CreatePostScreen(),
+    ),
+    GoRoute(
+      path: '/explore',
+      builder: (context, state) => const HashtagExploreScreen(),
+    ),
     GoRoute(
       path: '/chat/:chatId',
       builder: (context, state) => Scaffold(
